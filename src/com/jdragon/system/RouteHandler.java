@@ -28,6 +28,7 @@ public class RouteHandler
 		return ingr;
 	}
 	
+	@SuppressWarnings("unused")
 	private void initRoutes(DBAccess db) throws SQLException
 	{
 		Connection conn=db.getConnection();

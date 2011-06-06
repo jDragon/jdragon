@@ -18,12 +18,12 @@ import freemarker.template.TemplateException;
  */
 public class TemplateHandler 
 {
-	public static String processTemplate(Object vars, String tempalteName) throws IOException, TemplateException
+	public static String processTemplate(Object vars, String templateName) throws IOException, TemplateException
 	{
 		Configuration cfg = new Configuration();
 		cfg.setDirectoryForTemplateLoading(
                 new File("E:\\jdragon\\WebContent\\Templates"));
-		Template tpl=cfg.getTemplate(tempalteName);
+		Template tpl=cfg.getTemplate(templateName);
 		
 		Writer writer=new StringWriter();
 		tpl.process(vars, writer);

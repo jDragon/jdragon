@@ -5,3 +5,7 @@ ${welcome2}
 </h2> <br /><br />
 ${welcome2}
 <br />
+
+<#list args as arg>
+        ${arg} <br />
+</#list>

@@ -9,6 +9,32 @@
 </HEAD>
 
 <BODY>
-${content}
+<div style="color: ff0000; text-align: center">
+	<#if errors?exists>
+		<#list errors?keys as errkeys>
+		        ${errkeys}:${errors[errkeys]} <br />
+		</#list>
+	</#if>
+</div>
+
+<TABLE ALIGN="left" BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%">
+
+<TR ALIGN="left">
+	<TD> 
+		<#if left?exists>
+		      ${left}
+		</#if>
+	</TD>
+	<TD>
+		${content}
+	</TD>
+	<TD>
+		<#if right?exists>
+		      ${right}
+		</#if>
+	</TD>
+</TR>
+</TABLE>
+
 </BODY>
 </HTML>
