@@ -8,6 +8,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.jdragon.system.*;
+import com.jdragon.system.seasonings.Seasoning;
+import com.jdragon.system.seasonings.SeasoningEntry;
 
 /**
  * @author raghukr
@@ -31,14 +33,16 @@ public class Index extends HttpServlet
 		super.init(config);
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	@SuppressWarnings("unchecked")
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected void processRequests(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException
 	{
+		String method=request.getMethod();
 		DBUtil dbutil = new DBUtil();
 		dbutil.connect();
+		
+//		HttpSession session = request.getSession();
+//		String sessionID = session.getId();
 		
 		PrintWriter out = response.getWriter();
 
@@ -51,8 +55,31 @@ public class Index extends HttpServlet
 		
 		try 
 		{
-			BaseIngredient ingr=getIngredient(reqURI, dbutil);
-			ingr.setRequest(request);
+			BaseIngredient ingr=getIngredient(reqURI, request, dbutil);
+			if(method.equals("POST"))
+			{
+				String[] formNames=request.getParameterValues("FORMNAME");
+				if(formNames.length!=1 || formNames[0]==null || formNames[0].equals(""))
+				{
+					//throw error here
+				}
+				String formName=formNames[0];
+
+				HashMap params=new HashMap();
+			    Enumeration paramNames = request.getParameterNames();
+			    while(paramNames.hasMoreElements()) 
+			    {
+			      String paramName = (String)paramNames.nextElement();
+			      String[] paramValues = request.getParameterValues(paramName);
+			      params.put(paramName, paramValues);
+			    }
+				
+			    ingr = getIngredient(reqURI, request, dbutil);
+				if(ingr.formValidate(formName, params)==true)
+					ingr.formSubmit(formName, params);
+				
+				ingr.setSubmit(true);
+			}
 			
 			Map vars=new HashMap();
 			vars.put("content", ingr.mainCourse(list));
@@ -64,8 +91,7 @@ public class Index extends HttpServlet
 				String sPosition=se.getPosition();
 				String sName=se.getName();
 				String sIngrName=se.getIngredient();
-				BaseIngredient sIngr=getIngredientByName(sIngrName);
-				sIngr.setRequest(request);
+				BaseIngredient sIngr=getIngredientByName(sIngrName, request, dbutil);
 				
 				Seasoning s=sIngr.seasoning(sName);
 				HashMap map=new HashMap();
@@ -78,9 +104,9 @@ public class Index extends HttpServlet
 				contentStr=contentStr+str;
 				vars.put(sPosition, contentStr);
 			}
-			
+
 //Error Messages			
-			HashMap errMap=(HashMap)request.getAttribute("jDr_ErrorMap");
+			HashMap errMap=(HashMap)request.getAttribute("_jDr_ErrorMap");
 			if(errMap!=null)
 				vars.put("errors", errMap);
 			
@@ -95,25 +121,36 @@ public class Index extends HttpServlet
 		dbutil.disconnect();
 	}
 
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		processRequests(request, response);
+	}
+
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		// TODO Auto-generated method stub
+		processRequests(request, response);
 	}
 
-	private BaseIngredient getIngredient(String path, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
+	private BaseIngredient getIngredient(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
 	{
-		Class<?> c = Class.forName(RouteHandler.getIngredientName(path, db));
-		BaseIngredient inst=(BaseIngredient)c.newInstance();
-		return inst;
+		return getIngredientByName(RouteHandler.getIngredientName(path, db), request, db);
 	}
 	
-	private BaseIngredient getIngredientByName(String name) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
+	private BaseIngredient getIngredientByName(String name, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
 	{
 		Class<?> c = Class.forName(name);
 		BaseIngredient inst=(BaseIngredient)c.newInstance();
+		inst.setRequest(request);
+		inst.setDB(db);
+		
 		return inst;
 	}
 	

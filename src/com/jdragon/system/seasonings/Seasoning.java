@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jdragon.system;
+package com.jdragon.system.seasonings;
 
 /**
  * @author RIS
