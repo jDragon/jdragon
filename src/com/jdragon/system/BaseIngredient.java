@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.jdragon.system.form.Form;
 import com.jdragon.system.seasonings.Seasoning;
 
 /**
@@ -74,9 +75,9 @@ public abstract class BaseIngredient
 		this._request = _request;
 	}
 	
-	public String form(String formName)
+	public Form form(String formName)
 	{
-		return "";
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -93,10 +94,16 @@ public abstract class BaseIngredient
 	
 	protected final String getForm(String formName)
 	{
-		String formStr="<FORM name=\""+formName+"\" method=\"POST\" >";
-		formStr=formStr+"<INPUT type=\"HIDDEN\" name=\"FORMNAME\" value=\""+formName+"\"/>";
-		formStr=formStr+form(formName);
-		formStr=formStr+"</FORM>";
+		Form form= this.form(formName);
+		if(form==null)
+			return "<FORM name= \""+formName+"\" > " +
+					"The form "+formName+" is Empty " +
+							"</FORM>";
+		
+		String formStr="<FORM name=\""+formName+"\" method=\"POST\" >" +
+		"<INPUT type=\"HIDDEN\" name=\"FORMNAME\" value=\""+formName+"\"/>" +
+		form.Render() +
+		"</FORM>";
 		return formStr;
 	}
 }

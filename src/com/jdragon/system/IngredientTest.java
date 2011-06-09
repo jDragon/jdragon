@@ -5,6 +5,8 @@ package com.jdragon.system;
 
 import java.util.*;
 
+import com.jdragon.system.form.Form;
+import com.jdragon.system.form.FormComponent;
 import com.jdragon.system.seasonings.Seasoning;
 
 /**
@@ -63,18 +65,39 @@ public class IngredientTest extends BaseIngredient
 		return null;
 	}
 
-	public String form(String formName)
+	public Form form(String formName)
 	{
-		return "<Input type=\"text\" name=\"val1\" /><br />" +
-				"<Input type=\"text\" name=\"val2\" /><br />" +
-				"<Input type=\"submit\" />";
+		Form form=new Form();
+		form.addComponent(new FormComponent("num1").title("Number 1").value(""));
+		form.addComponent(new FormComponent("num2").title("Number 2").value(""));
+		form.addComponent(new FormComponent("Submit").type("submit").title("Submit").value("Submit"));
+		return form;
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Override
+	public boolean formValidate(String formName, HashMap params)
+	{
+	     String val1 = ((String[])params.get("num1"))[0];
+	     String val2 = ((String[])params.get("num2"))[0];
+	     try
+		{
+			Integer.parseInt(val1);
+			Integer.parseInt(val2);
+		} catch (NumberFormatException e)
+		{
+			setError("Error", "Not a Number");
+			// TODO Auto-generated catch block
+			return false;
+		}
+		return true;
+	}
+
+	@SuppressWarnings("unchecked")
 	public boolean formSubmit(String formName, HashMap params)
 	{
-	     String val1 = ((String[])params.get("val1"))[0];
-	     String val2 = ((String[])params.get("val2"))[0];
+	     String val1 = ((String[])params.get("num1"))[0];
+	     String val2 = ((String[])params.get("num2"))[0];
 	     int ival1=Integer.parseInt(val1);
 	     int ival2=Integer.parseInt(val2);
 	     
