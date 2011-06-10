@@ -2,10 +2,13 @@ package com.jdragon.system.form;
 
 import java.util.*;
 
-@SuppressWarnings("unchecked")
-public class FormComponent
+@SuppressWarnings({"unchecked", "unused"})
+public abstract class FormComponent
 {
 	private Map _hashMap=new HashMap();
+	
+	private String _type, _name, _title, _value;
+	
 	public String get(Object key)
 	{
 		return (String)_hashMap.get(key);
@@ -18,35 +21,23 @@ public class FormComponent
 
 	public FormComponent(String name)
 	{
-		put("name", name);
+		_name=name;
 	}
+
+	protected void type(String type) { _type=type; }
+	protected String type() { return _type; }
+	protected String name() { return _name; }
+	protected String title() { return _title; }
 	
 	public final FormComponent title(String titleStr)
 	{
-		put("title", titleStr);
+		_title=titleStr;
 		return this;
 	}
 	
-	public final FormComponent type(String typeStr)
-	{
-		put("type", typeStr);
-		return this;
-	}
+	public abstract FormComponent value(Object valueStr);
+	public abstract Object value();
 	
-	public final FormComponent value(String valueStr)
-	{
-		put("value", valueStr);
-		return this;
-	}
+	public abstract String Render();
 	
-	public String Render()
-	{
-		String title=get("title");
-		String type=get("type");
-		String value=get("value");
-		String name=get("name");
-		String str="<label>"+title+"</label>\n" +
-				"<input type=\"" + type + "\" name=\""+ name + "\" value=\"" + value + "\" / >";
-		return str;
-	}
 }
