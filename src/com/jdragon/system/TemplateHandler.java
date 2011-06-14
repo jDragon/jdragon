@@ -13,7 +13,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 /**
- * @author RIS
+ * @author raghukr
  *
  */
 public class TemplateHandler 

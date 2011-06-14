@@ -5,8 +5,7 @@ package com.jdragon.system;
 
 import java.util.*;
 
-import com.jdragon.system.form.Form;
-import com.jdragon.system.form.FormComponent;
+import com.jdragon.system.form.*;
 import com.jdragon.system.seasonings.Seasoning;
 
 /**
@@ -65,12 +64,19 @@ public class IngredientTest extends BaseIngredient
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Form form(String formName)
 	{
 		Form form=new Form();
-		form.addComponent(new FormComponent("num1").title("Number 1").value(""));
-		form.addComponent(new FormComponent("num2").title("Number 2").value(""));
-		form.addComponent(new FormComponent("Submit").type("submit").title("Submit").value("Submit"));
+		form.addComponent(new TextBox("num1").title("Number 1").value(""));
+		form.addComponent(new TextBox("num2").title("Number 2").value(""));
+		
+		Map selMap=new HashMap();
+		selMap.put("1", "1"); 
+		selMap.put("2", "2");
+		form.addComponent(new Select("select1").title("Select").value(selMap));
+		
+		form.addComponent(new Submit("submitbtn").title("Go!"));
 		return form;
 	}
 	

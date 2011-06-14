@@ -19,14 +19,14 @@ import com.jdragon.system.seasonings.SeasoningEntry;
 public class Index extends HttpServlet 
 {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Index() {
-        super();
-    }
-    
+	   
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public Index() {
+		super();
+	}
+	
 	@Override
 	public void init(ServletConfig config) throws ServletException
 	{
@@ -64,17 +64,17 @@ public class Index extends HttpServlet
 					//throw error here
 				}
 				String formName=formNames[0];
-
-				HashMap params=new HashMap();
-			    Enumeration paramNames = request.getParameterNames();
-			    while(paramNames.hasMoreElements()) 
-			    {
-			      String paramName = (String)paramNames.nextElement();
-			      String[] paramValues = request.getParameterValues(paramName);
-			      params.put(paramName, paramValues);
-			    }
 				
-			    ingr = getIngredient(reqURI, request, dbutil);
+				HashMap params=new HashMap();
+				Enumeration paramNames = request.getParameterNames();
+				while(paramNames.hasMoreElements()) 
+				{
+					String paramName = (String)paramNames.nextElement();
+					String[] paramValues = request.getParameterValues(paramName);
+					params.put(paramName, paramValues);
+				}
+				
+				ingr = getIngredient(reqURI, request, dbutil);
 				if(ingr.formValidate(formName, params)==true)
 					ingr.formSubmit(formName, params);
 				
