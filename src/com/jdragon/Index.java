@@ -1,6 +1,7 @@
 package com.jdragon;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.sql.*;
 import java.util.*;
 
@@ -55,7 +56,21 @@ public class Index extends HttpServlet
 		
 		try 
 		{
-			BaseIngredient ingr=getIngredient(reqURI, request, dbutil);
+			BaseIngredient ingr = null;
+			try
+			{
+				ingr = getIngredient(reqURI, request, dbutil);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			if(ingr==null)
+			{
+				ingr=new JDErrorHandler();
+				ingr.setRequest(request);
+				ingr.setDB(dbutil);
+			}
+			
 			if(method.equals("POST"))
 			{
 				String[] formNames=request.getParameterValues("FORMNAME");
@@ -121,7 +136,6 @@ public class Index extends HttpServlet
 		dbutil.disconnect();
 	}
 
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -129,7 +143,6 @@ public class Index extends HttpServlet
 	{
 		processRequests(request, response);
 	}
-
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -139,21 +152,20 @@ public class Index extends HttpServlet
 		processRequests(request, response);
 	}
 
-	private BaseIngredient getIngredient(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
+	private BaseIngredient getIngredient(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		return getIngredientByName(RouteHandler.getIngredientName(path, db), request, db);
 	}
-	
-	private BaseIngredient getIngredientByName(String name, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
+
+	private BaseIngredient getIngredientByName(String name, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
-		Class<?> c = Class.forName(name);
-		BaseIngredient inst=(BaseIngredient)c.newInstance();
+		BaseIngredient inst=BaseIngredient.getIngredientByName(name, this);
 		inst.setRequest(request);
 		inst.setDB(db);
-		
+
 		return inst;
 	}
-	
+
 	private List<SeasoningEntry> getSeasoningEntries(String path, DBAccess db) throws SQLException
 	{
 		List<SeasoningEntry> seList = new ArrayList<SeasoningEntry>();

@@ -3,6 +3,11 @@
  */
 package com.jdragon.system;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.jdragon.system.form.Form;
 import com.jdragon.system.seasonings.Seasoning;
+import com.jdragon.util.XMLBuilder;
 
 /**
  * @author raghukr
@@ -19,6 +25,7 @@ public abstract class BaseIngredient
 {
 	protected DBAccess _db=null;
 	private boolean _isPost=false;
+	private HttpServletRequest _request=null;
 	
 	public final boolean submitted()
 	{
@@ -35,8 +42,7 @@ public abstract class BaseIngredient
 		this._db = _db;
 	}
 
-	private HttpServletRequest _request=null;
-	
+/** Ingredient definition Methods */
 	/* (non-Javadoc)
 	 * @see com.jdragon.system.Ingredient#content()
 	 */
@@ -52,6 +58,18 @@ public abstract class BaseIngredient
 	{
 		return null;
 	}
+
+	String[] getUrlPatterns()
+	{
+		return urlpatterns();
+	}
+
+	protected String[] urlpatterns()
+	{
+		return new String[]{};
+	}
+
+/** Ingredient definition Methods ends*/
 	
 	protected final String _t(String originalStr)
 	{
@@ -75,6 +93,7 @@ public abstract class BaseIngredient
 		this._request = _request;
 	}
 	
+/** Form (Post request) processing methods */
 	public Form form(String formName)
 	{
 		return null;
@@ -91,19 +110,65 @@ public abstract class BaseIngredient
 	{
 		return false;
 	}
-	
+
 	protected final String getForm(String formName)
 	{
 		Form form= this.form(formName);
+		XMLBuilder builder=new XMLBuilder();
 		if(form==null)
-			return "<FORM name= \""+formName+"\" > " +
-					"The form "+formName+" is Empty " +
-							"</FORM>";
-		
-		String formStr="<FORM name=\""+formName+"\" method=\"POST\" >" +
-		"<INPUT type=\"HIDDEN\" name=\"FORMNAME\" value=\""+formName+"\"/>" +
-		form.Render() +
-		"</FORM>";
+		{
+			return builder.tag("FORM").attr("name", formName).close().text("The form "+formName+" is Empty ").end().toString();
+		}
+		String formStr=builder
+		.tag("FORM").attr("name", formName).attr("method", "POST").close()
+			.tag("INPUT").attr("type", "HIDDEN").attr("name", "FORMNAME").attr("value", formName).close()
+			.end()
+			.text(form.Render())
+		.end()
+		.toString();
+
 		return formStr;
+	}
+/** Form (Post request) processing methods ends*/
+	
+	/**
+	 * Allows calling methods in other ingredients by using BaseIngredient handler. 
+	 * The methods that can be called should take Object[] as input and return Object as output
+	 *  
+	 * @param methodName
+	 * @param args
+	 * @return
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	@SuppressWarnings("unchecked")
+	public final Object api(String methodName, Object[] args) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
+	{
+		Class cls=this.getClass();
+		Method m=cls.getMethod(methodName, new Class[]{Object[].class});
+		return m.invoke(this, new Object[]{args});
+		
+	}
+	
+	public static final BaseIngredient getIngredientByName(String name, Object caller) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	{
+		Class<?> c=null;
+		if(name.indexOf("com.jdragon.ingredient")==0)
+		{
+			JDClassLoader loader = new JDClassLoader(caller.getClass().getClassLoader());
+			loader.addURL(new File("E:/jdragon/WebContent/App/Default/Ingredients/").toURI().toURL());
+			c=loader.loadClass(name);
+		}
+		else
+		{
+			c = Class.forName(name);
+		}
+		
+		BaseIngredient inst=(BaseIngredient)c.newInstance();
+
+		return inst;
 	}
 }

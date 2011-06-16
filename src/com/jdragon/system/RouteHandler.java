@@ -5,6 +5,7 @@ package com.jdragon.system;
 
 import java.sql.*;
 import java.util.Hashtable;
+import java.util.regex.*;
 
 /**
  * @author raghukr
@@ -12,24 +13,24 @@ import java.util.Hashtable;
  */
 public class RouteHandler
 {
-	private Hashtable<String, String> _routeHash=new Hashtable<String, String>();
+	private static Hashtable<String, String> _routeHash=null;
 	
 	public static String getIngredientName(String path, DBAccess db) throws SQLException
 	{
-		Connection conn=db.getConnection();
-		Statement stmt = conn.createStatement();
-		String sql="select * from jd_routes where '"+path+"' like CONCAT(path, '%')";
-		ResultSet rs=stmt.executeQuery(sql);
-		String ingr="";
-		while (rs.next())
+		if(_routeHash==null)
 		{
-			  ingr = rs.getString("ingredient");
+			_routeHash=new Hashtable<String, String>();
+			initRoutes(db);
 		}
-		return ingr;
+		for(String key : _routeHash.keySet())
+		{
+			if(match(key, path))
+				return _routeHash.get(key);
+		}
+		return "";
 	}
 	
-	@SuppressWarnings("unused")
-	private void initRoutes(DBAccess db) throws SQLException
+	private static void initRoutes(DBAccess db) throws SQLException
 	{
 		Connection conn=db.getConnection();
 		Statement stmt = conn.createStatement();
@@ -38,9 +39,19 @@ public class RouteHandler
 		String ingr="", path="";
 		while (rs.next())
 		{
-			  ingr = rs.getString("path");
+			  path = rs.getString("path");
 			  ingr = rs.getString("ingredient");
 			  _routeHash.put(path, ingr);
 		}
+	}
+	
+	private static boolean match(String patternStr, String url)
+	{
+		patternStr="\\Q"+patternStr+"\\E";
+		patternStr=patternStr.replaceAll("%", Matcher.quoteReplacement("\\E[a-zA-Z_0-9.]+\\Q"));
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher matcher = pattern.matcher(url);
+		
+		return matcher.matches();
 	}
 }

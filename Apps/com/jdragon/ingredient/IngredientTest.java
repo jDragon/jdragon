@@ -1,10 +1,12 @@
 /**
  * 
  */
-package com.jdragon.system;
+package com.jdragon.ingredient;
 
 import java.util.*;
 
+import com.jdragon.system.BaseIngredient;
+import com.jdragon.system.TemplateHandler;
 import com.jdragon.system.form.*;
 import com.jdragon.system.seasonings.Seasoning;
 
@@ -62,6 +64,10 @@ public class IngredientTest extends BaseIngredient
 			return s;
 		}
 		return null;
+	}
+	public String[] urlpatterns()
+	{
+		return new String[]{"/Index/%/view", "/Indextest"};
 	}
 
 	@SuppressWarnings("unchecked")
