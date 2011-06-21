@@ -16,6 +16,12 @@
 		</#list>
 	</#if>
 </div>
+<style>
+.error-password, .error-textbox
+{
+border:5px solid red;
+}
+</style>
 
 <TABLE ALIGN="left" BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%">
 

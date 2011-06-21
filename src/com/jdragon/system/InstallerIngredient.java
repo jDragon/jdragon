@@ -12,7 +12,7 @@ public class InstallerIngredient extends BaseIngredient
 	{
 //		String op=args.get(0);
 		String ingrStr=args.get(1);
-		BaseIngredient ingr=BaseIngredient.getIngredientByName(ingrStr, this);
+		BaseIngredient ingr=BaseIngredient.getIngredientByName(ingrStr);
 		String[] urlpatterns=ingr.getUrlPatterns();
 
 		Connection conn=_db.getConnection();

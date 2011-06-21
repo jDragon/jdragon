@@ -23,13 +23,13 @@ public class Form
 		_elements.add(comp);
 	}
 	
-	public String Render()
+	public String Render(HashMap errorMap)
 	{
 		String str="";
 		for(int i=0; i<_elements.size(); i++)
 		{
 			FormComponent comp=(FormComponent)_elements.get(i);
-			str=str+comp.Render();
+			str=str+comp.Render(errorMap);
 		}
 		return str;
 	}

@@ -159,7 +159,7 @@ public class Index extends HttpServlet
 
 	private BaseIngredient getIngredientByName(String name, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
-		BaseIngredient inst=BaseIngredient.getIngredientByName(name, this);
+		BaseIngredient inst=BaseIngredient.getIngredientByName(name);
 		inst.setRequest(request);
 		inst.setDB(db);
 

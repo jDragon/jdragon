@@ -40,4 +40,11 @@ public class DBUtil implements DBAccess
 	{
 		return conn;
 	}
+
+	@Override
+	public String resolveSQL(String sql)
+	{
+		
+		return null;
+	}
 }

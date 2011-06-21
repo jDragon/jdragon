@@ -5,14 +5,29 @@ import java.util.Stack;
 public class XMLBuilder
 {
 	String _str="";
-	Stack<String> stk=new Stack<String>();
+	Stack<String> tagStack=new Stack<String>();
+	Stack<Boolean> tagCloseStack=new Stack<Boolean>();
 	
 	public XMLBuilder tag(String name)
 	{
-		stk.push(name);
+		checkClosePrev();
+		tagStack.push(name);
 		append("<"+name);
+		tagCloseStack.push(Boolean.FALSE);
 		
 		return this;
+	}
+	private void checkClosePrev()
+	{
+		if(tagCloseStack.size()<=0)
+			return;
+		Boolean isPrevClosed=tagCloseStack.peek();
+		if(isPrevClosed.equals(Boolean.FALSE))
+		{
+			tagCloseStack.pop();
+			append(">");
+			tagCloseStack.push(Boolean.TRUE);
+		}		
 	}
 	
 	public XMLBuilder attr(String name, String val)
@@ -22,22 +37,22 @@ public class XMLBuilder
 		return this;
 	}
 	
-	public XMLBuilder close()
-	{
-		append(">");
-		return this;
-	}
-
 	public XMLBuilder text(String txt)
 	{
+		checkClosePrev();
+
 		append(txt);
 		return this;
 	}
 	
 	public XMLBuilder end()
 	{
-		String name=stk.pop();
-		append("</"+name+">");
+		Boolean isClosed=tagCloseStack.pop();
+		String name=tagStack.pop();
+		if(isClosed.equals(Boolean.TRUE))
+			append("</"+name+">");
+		else
+			append(" />");
 		
 		return this;
 	}

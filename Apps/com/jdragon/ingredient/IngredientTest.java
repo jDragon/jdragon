@@ -9,6 +9,7 @@ import com.jdragon.system.BaseIngredient;
 import com.jdragon.system.TemplateHandler;
 import com.jdragon.system.form.*;
 import com.jdragon.system.seasonings.Seasoning;
+import com.jdragon.util.JDHashMap;
 
 /**
  * @author raghukr
@@ -65,6 +66,7 @@ public class IngredientTest extends BaseIngredient
 		}
 		return null;
 	}
+
 	public String[] urlpatterns()
 	{
 		return new String[]{"/Index/%/view", "/Indextest"};
@@ -77,9 +79,9 @@ public class IngredientTest extends BaseIngredient
 		form.addComponent(new TextBox("num1").title("Number 1").value(""));
 		form.addComponent(new TextBox("num2").title("Number 2").value(""));
 		
-		Map selMap=new HashMap();
-		selMap.put("1", "1"); 
-		selMap.put("2", "2");
+		JDHashMap selMap=new JDHashMap();
+		selMap.add("1", "1").add("2", "2");
+		
 		form.addComponent(new Select("select1").title("Select").value(selMap));
 		
 		form.addComponent(new Submit("submitbtn").title("Go!"));
@@ -90,19 +92,26 @@ public class IngredientTest extends BaseIngredient
 	@Override
 	public boolean formValidate(String formName, HashMap params)
 	{
-	     String val1 = ((String[])params.get("num1"))[0];
-	     String val2 = ((String[])params.get("num2"))[0];
-	     try
+	    String val1 = ((String[])params.get("num1"))[0];
+	    String val2 = ((String[])params.get("num2"))[0];
+	    boolean ret=true;
+		try
 		{
 			Integer.parseInt(val1);
+		} catch (NumberFormatException e)
+		{
+			setFormError("num1", "Not a Number");
+			ret=false;
+		}
+		try
+		{
 			Integer.parseInt(val2);
 		} catch (NumberFormatException e)
 		{
-			setError("Error", "Not a Number");
-			// TODO Auto-generated catch block
-			return false;
+			setFormError("num2", "Not a Number");
+			ret=false;
 		}
-		return true;
+		return ret;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -88,6 +88,19 @@ public abstract class BaseIngredient
 		errMap.put(title, message);
 	}
 
+	@SuppressWarnings("unchecked")
+	protected final void setFormError(String title, String message)
+	{
+		HashMap errMap=(HashMap)_request.getAttribute("_jDr_FormErrorMap");
+		if(errMap==null)
+		{
+			errMap=new HashMap();
+			_request.setAttribute("_jDr_FormErrorMap", errMap);
+		}
+		errMap.put(title, message);
+		setError(title, message);
+	}
+
 	public final void setRequest(HttpServletRequest _request)
 	{
 		this._request = _request;
@@ -111,19 +124,23 @@ public abstract class BaseIngredient
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected final String getForm(String formName)
 	{
 		Form form= this.form(formName);
 		XMLBuilder builder=new XMLBuilder();
 		if(form==null)
 		{
-			return builder.tag("FORM").attr("name", formName).close().text("The form "+formName+" is Empty ").end().toString();
+			return builder.tag("FORM").attr("name", formName).text("The form "+formName+" is Empty ").end().toString();
 		}
+		
+		HashMap errMap=(HashMap)_request.getAttribute("_jDr_FormErrorMap");
+		
 		String formStr=builder
-		.tag("FORM").attr("name", formName).attr("method", "POST").close()
-			.tag("INPUT").attr("type", "HIDDEN").attr("name", "FORMNAME").attr("value", formName).close()
+		.tag("FORM").attr("name", formName).attr("method", "POST")
+			.tag("INPUT").attr("type", "HIDDEN").attr("name", "FORMNAME").attr("value", formName)
 			.end()
-			.text(form.Render())
+			.text(form.Render(errMap))
 		.end()
 		.toString();
 
@@ -153,12 +170,12 @@ public abstract class BaseIngredient
 		
 	}
 	
-	public static final BaseIngredient getIngredientByName(String name, Object caller) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	public static final BaseIngredient getIngredientByName(String name) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		Class<?> c=null;
 		if(name.indexOf("com.jdragon.ingredient")==0)
 		{
-			JDClassLoader loader = new JDClassLoader(caller.getClass().getClassLoader());
+			JDClassLoader loader = new JDClassLoader(JDClassLoader.class.getClassLoader());
 			loader.addURL(new File("E:/jdragon/WebContent/App/Default/Ingredients/").toURI().toURL());
 			c=loader.loadClass(name);
 		}

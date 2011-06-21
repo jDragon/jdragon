@@ -38,6 +38,6 @@ public abstract class FormComponent
 	public abstract FormComponent value(Object valueStr);
 	public abstract Object value();
 	
-	public abstract String Render();
+	public abstract String Render(HashMap errorMap);
 	
 }

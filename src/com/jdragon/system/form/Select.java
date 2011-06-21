@@ -2,6 +2,8 @@ package com.jdragon.system.form;
 
 import java.util.*;
 
+import com.jdragon.util.XMLBuilder;
+
 @SuppressWarnings("unchecked")
 public class Select extends FormComponent
 {
@@ -9,20 +11,26 @@ public class Select extends FormComponent
 	
 	public Select(String name){super(name); super.type("select");}
 	@Override
-	public String Render()
+	public String Render(HashMap errorMap)
 	{
-		String str="<div>" +
-		"<label>"+title()+"</label>\n" +
-		"<div>" +
-		"<select>";
-		for(Map.Entry<String, String> entry : _value.entrySet())
-		{
-			str=str+"<option value=\""+entry.getKey()+"\">"+ entry.getValue()+"</option>";
-		}
-		str=str+
-		"</select>" +
-		"</div></div>" ;
-		return str;
+		XMLBuilder builder = new XMLBuilder();
+		builder
+		.tag("div")
+			.tag("label").text(title()).end()
+			.tag("div")
+				.tag("select");
+
+					for(Map.Entry<String, String> entry : _value.entrySet())
+					{
+						builder.tag("option").attr("value", entry.getKey()).text(entry.getValue()).end();
+					}
+
+				builder
+				.end()
+			.end()
+		.end();
+		
+		return builder.toString();
 	}
 	@Override
 	public FormComponent value(Object valueStr) throws ClassCastException
