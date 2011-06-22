@@ -9,8 +9,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.jdragon.system.*;
-import com.jdragon.system.seasonings.Seasoning;
-import com.jdragon.system.seasonings.SeasoningEntry;
+import com.jdragon.system.chunk.Chunk;
+import com.jdragon.system.chunk.ChunkEntry;
 
 /**
  * @author raghukr
@@ -56,7 +56,7 @@ public class Index extends HttpServlet
 		
 		try 
 		{
-			BaseIngredient ingr = null;
+			BaseElement ingr = null;
 			try
 			{
 				ingr = getIngredient(reqURI, request, dbutil);
@@ -97,18 +97,18 @@ public class Index extends HttpServlet
 			}
 			
 			Map vars=new HashMap();
-			vars.put("content", ingr.mainCourse(list));
+			vars.put("content", ingr.mainContent(list));
 			
-			List<SeasoningEntry> seList=getSeasoningEntries("", dbutil);
+			List<ChunkEntry> seList=getSeasoningEntries("", dbutil);
 			for(int indx=0; indx<seList.size(); indx++)
 			{
-				SeasoningEntry se=seList.get(indx);
+				ChunkEntry se=seList.get(indx);
 				String sPosition=se.getPosition();
 				String sName=se.getName();
-				String sIngrName=se.getIngredient();
-				BaseIngredient sIngr=getIngredientByName(sIngrName, request, dbutil);
+				String sIngrName=se.getChunk();
+				BaseElement sIngr=getIngredientByName(sIngrName, request, dbutil);
 				
-				Seasoning s=sIngr.seasoning(sName);
+				Chunk s=sIngr.chunk(sName);
 				HashMap map=new HashMap();
 				map.put("title", s.getTitle());
 				map.put("data", s.getContent());
@@ -152,32 +152,32 @@ public class Index extends HttpServlet
 		processRequests(request, response);
 	}
 
-	private BaseIngredient getIngredient(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	private BaseElement getIngredient(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		return getIngredientByName(RouteHandler.getIngredientName(path, db), request, db);
 	}
 
-	private BaseIngredient getIngredientByName(String name, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	private BaseElement getIngredientByName(String name, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
-		BaseIngredient inst=BaseIngredient.getIngredientByName(name);
+		BaseElement inst=BaseElement.getElementByName(name);
 		inst.setRequest(request);
 		inst.setDB(db);
 
 		return inst;
 	}
 
-	private List<SeasoningEntry> getSeasoningEntries(String path, DBAccess db) throws SQLException
+	private List<ChunkEntry> getSeasoningEntries(String path, DBAccess db) throws SQLException
 	{
-		List<SeasoningEntry> seList = new ArrayList<SeasoningEntry>();
+		List<ChunkEntry> seList = new ArrayList<ChunkEntry>();
 		Connection conn=db.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql="select * from jd_seasonings";
+		String sql=db.resolvePrefix("select * from [seasonings]");
 		ResultSet rs=stmt.executeQuery(sql);
 		while (rs.next())
 		{
-			SeasoningEntry se=new SeasoningEntry();
+			ChunkEntry se=new ChunkEntry();
 			se.setName(rs.getString("name"));
-			se.setIngredient(rs.getString("ingredient"));
+			se.setChunk(rs.getString("ingredient"));
 			se.setPosition(rs.getString("position"));
 			seList.add(se);
 		}

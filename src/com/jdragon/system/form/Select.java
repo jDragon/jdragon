@@ -33,9 +33,9 @@ public class Select extends FormComponent
 		return builder.toString();
 	}
 	@Override
-	public FormComponent value(Object valueStr) throws ClassCastException
+	public FormComponent value(Object valueMap) throws ClassCastException
 	{
-		_value=(HashMap)valueStr;
+		_value=(HashMap)valueMap;
 		return this;
 	}
 	@Override

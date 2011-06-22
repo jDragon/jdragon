@@ -3,16 +3,16 @@ package com.jdragon.system;
 import java.sql.*;
 import java.util.List;
 
-import com.jdragon.system.BaseIngredient;
+import com.jdragon.system.BaseElement;
 
-public class InstallerIngredient extends BaseIngredient
+public class InstallerIngredient extends BaseElement
 {
 	@Override
-	public String mainCourse(List<String> args) throws Exception
+	public String mainContent(List<String> args) throws Exception
 	{
 //		String op=args.get(0);
 		String ingrStr=args.get(1);
-		BaseIngredient ingr=BaseIngredient.getIngredientByName(ingrStr);
+		BaseElement ingr=BaseElement.getElementByName(ingrStr);
 		String[] urlpatterns=ingr.getUrlPatterns();
 
 		Connection conn=_db.getConnection();

@@ -19,7 +19,7 @@
 <style>
 .error-password, .error-textbox
 {
-border:5px solid red;
+	border:5px solid red;
 }
 </style>
 

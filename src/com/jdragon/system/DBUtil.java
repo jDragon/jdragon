@@ -1,9 +1,13 @@
 package com.jdragon.system;
 
 import java.sql.*;
+import java.util.regex.*;
 
 public class DBUtil implements DBAccess
 {
+    final static Pattern pattern =
+        Pattern.compile("\\[(.*?)\\]", Pattern.DOTALL);
+    
 	public Connection conn=null;
 	public void connect()
 	{
@@ -42,9 +46,23 @@ public class DBUtil implements DBAccess
 	}
 
 	@Override
-	public String resolveSQL(String sql)
+	public String resolvePrefix(String sql)
 	{
-		
-		return null;
+		String sqlStr=replaceValues(sql, "jd_");
+		return sqlStr;
 	}
+	
+	private static String replaceValues(final String template,
+		    final String prefix){
+
+		    final StringBuffer sb = new StringBuffer();
+		    final Matcher matcher = pattern.matcher(template);
+		    while(matcher.find()){
+		        final String name = matcher.group(1);
+		        final String replacement = prefix+name;
+		        matcher.appendReplacement(sb, replacement);
+		    }
+		    matcher.appendTail(sb);
+		    return sb.toString();
+		}
 }

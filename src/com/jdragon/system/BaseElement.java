@@ -13,15 +13,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.Form;
-import com.jdragon.system.seasonings.Seasoning;
 import com.jdragon.util.XMLBuilder;
 
 /**
  * @author raghukr
  *
  */
-public abstract class BaseIngredient 
+public abstract class BaseElement 
 {
 	protected DBAccess _db=null;
 	private boolean _isPost=false;
@@ -42,11 +42,7 @@ public abstract class BaseIngredient
 		this._db = _db;
 	}
 
-/** Ingredient definition Methods */
-	/* (non-Javadoc)
-	 * @see com.jdragon.system.Ingredient#content()
-	 */
-	public abstract String mainCourse(List<String> args) throws Exception;
+	public abstract String mainContent(List<String> args) throws Exception;
 	
 	public String[] seasoningsList()
 	{
@@ -54,7 +50,7 @@ public abstract class BaseIngredient
 		return strList;
 	}
 	
-	public Seasoning seasoning(String name)
+	public Chunk chunk(String name)
 	{
 		return null;
 	}
@@ -170,13 +166,13 @@ public abstract class BaseIngredient
 		
 	}
 	
-	public static final BaseIngredient getIngredientByName(String name) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	public static final BaseElement getElementByName(String name) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		Class<?> c=null;
-		if(name.indexOf("com.jdragon.ingredient")==0)
+		if(name.indexOf("com.jdragon.element")==0)
 		{
 			JDClassLoader loader = new JDClassLoader(JDClassLoader.class.getClassLoader());
-			loader.addURL(new File("E:/jdragon/WebContent/App/Default/Ingredients/").toURI().toURL());
+			loader.addURL(new File("E:/jdragon/WebContent/App/Default/Elements/").toURI().toURL());
 			c=loader.loadClass(name);
 		}
 		else
@@ -184,7 +180,7 @@ public abstract class BaseIngredient
 			c = Class.forName(name);
 		}
 		
-		BaseIngredient inst=(BaseIngredient)c.newInstance();
+		BaseElement inst=(BaseElement)c.newInstance();
 
 		return inst;
 	}

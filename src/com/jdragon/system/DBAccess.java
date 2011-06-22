@@ -12,5 +12,5 @@ import java.sql.Connection;
 public interface DBAccess 
 {
 	public Connection getConnection();
-	public String resolveSQL(String sql); 
+	public String resolvePrefix(String sql); 
 }

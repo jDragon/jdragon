@@ -1,21 +1,21 @@
 /**
  * 
  */
-package com.jdragon.ingredient;
+package com.jdragon.element;
 
 import java.util.*;
 
-import com.jdragon.system.BaseIngredient;
+import com.jdragon.system.BaseElement;
 import com.jdragon.system.TemplateHandler;
+import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.*;
-import com.jdragon.system.seasonings.Seasoning;
 import com.jdragon.util.JDHashMap;
 
 /**
  * @author raghukr
  *
  */
-public class IngredientTest extends BaseIngredient 
+public class CustomElementTest extends BaseElement 
 {
 	String _sum="";
 
@@ -24,7 +24,7 @@ public class IngredientTest extends BaseIngredient
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public String mainCourse(List<String> args) throws Exception 
+	public String mainContent(List<String> args) throws Exception 
 	{
 		HashMap vars = new HashMap();
 
@@ -33,7 +33,8 @@ public class IngredientTest extends BaseIngredient
 			vars.put("sum", _sum);
 		}
 		vars.put("welcome1", _t("Welcome to ingredient test"));
-		vars.put("welcome2", _t("Hello, how are you?"));
+//		vars.put("welcome2", _t("Hello, how are you?"));
+		vars.put("welcome2", _t(_db.resolvePrefix("select from [sometable] where id=1")));
 		vars.put("args", args);
 		vars.put("form", getForm("myForm"));
 
@@ -48,18 +49,18 @@ public class IngredientTest extends BaseIngredient
 		return strList;
 	}
 
-	public Seasoning seasoning(String name)
+	public Chunk chunk(String name)
 	{
 		if(name.equals("sample1"))
 		{
-			Seasoning s=new Seasoning();
+			Chunk s=new Chunk();
 			s.setTitle(_t("Sample 1"));
 			s.setContent("Hello, World!");
 			return s;
 		}
 		if(name.equals("sample2"))
 		{
-			Seasoning s=new Seasoning();
+			Chunk s=new Chunk();
 			s.setTitle(_t("Sample 2"));
 			s.setContent("Have a good day!");
 			return s;

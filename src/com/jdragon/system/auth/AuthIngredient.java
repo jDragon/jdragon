@@ -6,7 +6,7 @@ package com.jdragon.system.auth;
 import java.util.HashMap;
 import java.util.List;
 
-import com.jdragon.system.BaseIngredient;
+import com.jdragon.system.BaseElement;
 import com.jdragon.system.form.*;
 
 /**
@@ -14,14 +14,14 @@ import com.jdragon.system.form.*;
  *
  */
 @SuppressWarnings("unchecked")
-public class AuthIngredient extends BaseIngredient
+public class AuthIngredient extends BaseElement
 {
 	boolean _isValid=false;
 	/* (non-Javadoc)
 	 * @see com.jdragon.system.BaseIngredient#mainCourse(java.util.List)
 	 */
 	@Override
-	public String mainCourse(List<String> args) throws Exception
+	public String mainContent(List<String> args) throws Exception
 	{
 		if(this.submitted() && _isValid)
 		{

@@ -1,8 +1,8 @@
-package com.jdragon.system.seasonings;
+package com.jdragon.system.chunk;
 
-public class SeasoningEntry
+public class ChunkEntry
 {
-	private String name, ingredient, position;
+	private String name, chunk, position;
 
 	public String getName()
 	{
@@ -14,14 +14,14 @@ public class SeasoningEntry
 		this.name = name;
 	}
 
-	public String getIngredient()
+	public String getChunk()
 	{
-		return ingredient;
+		return chunk;
 	}
 
-	public void setIngredient(String ingredient)
+	public void setChunk(String chunk)
 	{
-		this.ingredient = ingredient;
+		this.chunk = chunk;
 	}
 
 	public String getPosition()

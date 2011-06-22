@@ -2,7 +2,7 @@ package com.jdragon.system;
 
 import java.util.List;
 
-public class JDErrorHandler extends BaseIngredient
+public class JDErrorHandler extends BaseElement
 {
 	private String _error=null;
 	
@@ -17,7 +17,7 @@ public class JDErrorHandler extends BaseIngredient
 	}
 
 	@Override
-	public String mainCourse(List<String> args) throws Exception
+	public String mainContent(List<String> args) throws Exception
 	{
 		if(_error==null)
 			_error="Error Occured";

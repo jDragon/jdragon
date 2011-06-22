@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.jdragon.system.seasonings;
+package com.jdragon.system.chunk;
 
 /**
  * @author RIS
  *
  */
-public class Seasoning
+public class Chunk
 {
 	public String getTitle()
 	{

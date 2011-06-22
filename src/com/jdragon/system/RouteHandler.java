@@ -4,7 +4,7 @@
 package com.jdragon.system;
 
 import java.sql.*;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.regex.*;
 
 /**
@@ -34,7 +34,7 @@ public class RouteHandler
 	{
 		Connection conn=db.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql="select * from jd_routes";
+		String sql=db.resolvePrefix("select * from [routes]");
 		ResultSet rs=stmt.executeQuery(sql);
 		String ingr="", path="";
 		while (rs.next())
@@ -45,12 +45,19 @@ public class RouteHandler
 		}
 	}
 	
+	private static Map<String, Pattern> patternMap = new HashMap<String, Pattern>();
+	
 	private static boolean match(String patternStr, String url)
 	{
-		patternStr="\\Q"+patternStr+"\\E";
-		patternStr=patternStr.replaceAll("%", Matcher.quoteReplacement("\\E[a-zA-Z_0-9.]+\\Q"));
-		Pattern pattern = Pattern.compile(patternStr);
-		Matcher matcher = pattern.matcher(url);
+		Pattern patrn=patternMap.get(patternStr);
+		if(patrn==null)
+		{
+			String patternStrEsc="\\Q"+patternStr+"\\E";
+			patternStrEsc=patternStrEsc.replaceAll("%", Matcher.quoteReplacement("\\E[a-zA-Z_0-9.]+\\Q"));
+			patrn = Pattern.compile(patternStrEsc);
+			patternMap.put(patternStr, patrn);
+		}
+		Matcher matcher = patrn.matcher(url);
 		
 		return matcher.matches();
 	}
