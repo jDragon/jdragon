@@ -33,8 +33,7 @@ public class CustomElementTest extends BaseElement
 			vars.put("sum", _sum);
 		}
 		vars.put("welcome1", _t("Welcome to ingredient test"));
-//		vars.put("welcome2", _t("Hello, how are you?"));
-		vars.put("welcome2", _t(_db.resolvePrefix("select from [sometable] where id=1")));
+		vars.put("welcome2", _t("Hello, How are you?"));
 		vars.put("args", args);
 		vars.put("form", getForm("myForm"));
 

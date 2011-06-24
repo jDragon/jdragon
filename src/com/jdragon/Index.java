@@ -11,6 +11,7 @@ import javax.servlet.http.*;
 import com.jdragon.system.*;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.chunk.ChunkEntry;
+import com.jdragon.util.StaticContent;
 
 /**
  * @author raghukr
@@ -27,7 +28,7 @@ public class Index extends HttpServlet
 	public Index() {
 		super();
 	}
-	
+
 	@Override
 	public void init(ServletConfig config) throws ServletException
 	{
@@ -53,13 +54,13 @@ public class Index extends HttpServlet
 		StringTokenizer tok = new StringTokenizer(reqURI);
 		while(tok.hasMoreTokens())
 			list.add(tok.nextToken("/"));
-		
+
 		try 
 		{
 			BaseElement ingr = null;
 			try
 			{
-				ingr = getIngredient(reqURI, request, dbutil);
+				ingr = getElement(reqURI, request, dbutil);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -89,7 +90,7 @@ public class Index extends HttpServlet
 					params.put(paramName, paramValues);
 				}
 				
-				ingr = getIngredient(reqURI, request, dbutil);
+				ingr = getElement(reqURI, request, dbutil);
 				if(ingr.formValidate(formName, params)==true)
 					ingr.formSubmit(formName, params);
 				
@@ -98,8 +99,9 @@ public class Index extends HttpServlet
 			
 			Map vars=new HashMap();
 			vars.put("content", ingr.mainContent(list));
+			vars.put("title", "Main Content");
 			
-			List<ChunkEntry> seList=getSeasoningEntries("", dbutil);
+			List<ChunkEntry> seList=getChunks("", dbutil);
 			for(int indx=0; indx<seList.size(); indx++)
 			{
 				ChunkEntry se=seList.get(indx);
@@ -124,7 +126,18 @@ public class Index extends HttpServlet
 			HashMap errMap=(HashMap)request.getAttribute("_jDr_ErrorMap");
 			if(errMap!=null)
 				vars.put("errors", errMap);
+
+			StaticContent.addCSS("/jdragon/Templates/zengarden-sample.css");
 			
+			String cssStr="<style type=\"text/css\" media=\"all\">";
+			List cssList=StaticContent.getCSSList();
+			for(int i=0; i<cssList.size(); i++)
+			{
+				cssStr=cssStr+"@import url(\""+cssList.get(i)+"\");";
+			}
+			cssStr=cssStr+"</style>";
+			
+			vars.put("css", cssStr);
 			String htmlOut=TemplateHandler.processTemplate(vars, "html.ftl");
 			out.println(htmlOut);
 		} 
@@ -132,6 +145,10 @@ public class Index extends HttpServlet
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		finally
+		{
+			StaticContent.clear();
 		}
 		dbutil.disconnect();
 	}
@@ -152,7 +169,7 @@ public class Index extends HttpServlet
 		processRequests(request, response);
 	}
 
-	private BaseElement getIngredient(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	private BaseElement getElement(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		return getIngredientByName(RouteHandler.getIngredientName(path, db), request, db);
 	}
@@ -166,7 +183,7 @@ public class Index extends HttpServlet
 		return inst;
 	}
 
-	private List<ChunkEntry> getSeasoningEntries(String path, DBAccess db) throws SQLException
+	private List<ChunkEntry> getChunks(String path, DBAccess db) throws SQLException
 	{
 		List<ChunkEntry> seList = new ArrayList<ChunkEntry>();
 		Connection conn=db.getConnection();

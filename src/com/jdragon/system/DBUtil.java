@@ -3,6 +3,10 @@ package com.jdragon.system;
 import java.sql.*;
 import java.util.regex.*;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 public class DBUtil implements DBAccess
 {
     final static Pattern pattern =
@@ -13,16 +17,24 @@ public class DBUtil implements DBAccess
 	{
         try
         {
-            String userName = "test";
+/*
+        	String userName = "test";
             String password = "test";
             String url = "jdbc:mysql://localhost/jd";
             Class.forName ("com.mysql.jdbc.Driver").newInstance ();
             conn = DriverManager.getConnection (url, userName, password);
+*/
+        	InitialContext initContext = new InitialContext();
+        	// Look up the data source
+        	Context envContext  = (Context)initContext.lookup("java:/comp/env");
+        	DataSource dataSource =(DataSource)envContext.lookup ("jdbc/jdDB");
+        	conn = dataSource.getConnection();
             System.out.println ("Database connection established");
         }
         catch (Exception e)
         {
         	System.err.println ("Cannot connect to database server");
+        	e.printStackTrace();
         }
 	}
 	
