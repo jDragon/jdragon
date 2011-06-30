@@ -11,7 +11,6 @@ import javax.servlet.http.*;
 import com.jdragon.system.*;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.chunk.ChunkEntry;
-import com.jdragon.util.StaticContent;
 
 /**
  * @author raghukr
@@ -42,6 +41,8 @@ public class Index extends HttpServlet
 		String method=request.getMethod();
 		DBUtil dbutil = new DBUtil();
 		dbutil.connect();
+		
+		TemplateHandler.init();
 		
 //		HttpSession session = request.getSession();
 //		String sessionID = session.getId();
@@ -81,11 +82,11 @@ public class Index extends HttpServlet
 				}
 				String formName=formNames[0];
 				
-				HashMap params=new HashMap();
-				Enumeration paramNames = request.getParameterNames();
+				HashMap<String, String[]> params=new HashMap<String, String[]>();
+				Enumeration<String> paramNames = request.getParameterNames();
 				while(paramNames.hasMoreElements()) 
 				{
-					String paramName = (String)paramNames.nextElement();
+					String paramName = paramNames.nextElement();
 					String[] paramValues = request.getParameterValues(paramName);
 					params.put(paramName, paramValues);
 				}
@@ -97,7 +98,7 @@ public class Index extends HttpServlet
 				ingr.setSubmit(true);
 			}
 			
-			Map vars=new HashMap();
+			Map<String, Object> vars=new HashMap<String, Object>();
 			vars.put("content", ingr.mainContent(list));
 			vars.put("title", "Main Content");
 			
@@ -111,7 +112,7 @@ public class Index extends HttpServlet
 				BaseElement sIngr=getIngredientByName(sIngrName, request, dbutil);
 				
 				Chunk s=sIngr.chunk(sName);
-				HashMap map=new HashMap();
+				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("title", s.getTitle());
 				map.put("data", s.getContent());
 				String str=TemplateHandler.processTemplate(map, "seasonings.ftl");
@@ -123,21 +124,12 @@ public class Index extends HttpServlet
 			}
 
 //Error Messages			
-			HashMap errMap=(HashMap)request.getAttribute("_jDr_ErrorMap");
+			HashMap<String, String> errMap=(HashMap<String, String>)request.getAttribute("_jDr_ErrorMap");
 			if(errMap!=null)
 				vars.put("errors", errMap);
 
-			StaticContent.addCSS("/jdragon/Templates/zengarden-sample.css");
+			TemplateHandler.addCSS("/jdragon/Templates/zengarden-sample.css");
 			
-			String cssStr="<style type=\"text/css\" media=\"all\">";
-			List cssList=StaticContent.getCSSList();
-			for(int i=0; i<cssList.size(); i++)
-			{
-				cssStr=cssStr+"@import url(\""+cssList.get(i)+"\");";
-			}
-			cssStr=cssStr+"</style>";
-			
-			vars.put("css", cssStr);
 			String htmlOut=TemplateHandler.processTemplate(vars, "html.ftl");
 			out.println(htmlOut);
 		} 
@@ -148,7 +140,7 @@ public class Index extends HttpServlet
 		}
 		finally
 		{
-			StaticContent.clear();
+			TemplateHandler.cleanup();
 		}
 		dbutil.disconnect();
 	}

@@ -9,9 +9,8 @@ public class TextBox extends FormComponent
 	String _value="";
 	
 	public TextBox(String name){super(name); super.type("textbox");}
-	@SuppressWarnings("unchecked")
 	@Override
-	public String Render(HashMap errorMap)
+	public String Render(HashMap<String, String> errorMap)
 	{
 		String compClass="input-"+type();
 		if(errorMap!=null)

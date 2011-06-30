@@ -72,7 +72,7 @@ public abstract class BaseElement
 		return originalStr;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected final void setError(String title, String message)
 	{
 		HashMap errMap=(HashMap)_request.getAttribute("_jDr_ErrorMap");
@@ -84,7 +84,7 @@ public abstract class BaseElement
 		errMap.put(title, message);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected final void setFormError(String title, String message)
 	{
 		HashMap errMap=(HashMap)_request.getAttribute("_jDr_FormErrorMap");
@@ -108,14 +108,12 @@ public abstract class BaseElement
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean formValidate(String formName, HashMap params)
+	public boolean formValidate(String formName, HashMap<String, String[]> params)
 	{
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean formSubmit(String formName, HashMap params)
+	public boolean formSubmit(String formName, HashMap<String, String[]> params)
 	{
 		return false;
 	}
@@ -130,7 +128,7 @@ public abstract class BaseElement
 			return builder.tag("FORM").attr("name", formName).text("The form "+formName+" is Empty ").end().toString();
 		}
 		
-		HashMap errMap=(HashMap)_request.getAttribute("_jDr_FormErrorMap");
+		HashMap<String, String> errMap=(HashMap<String, String>)_request.getAttribute("_jDr_FormErrorMap");
 		
 		String formStr=builder
 		.tag("FORM").attr("name", formName).attr("method", "POST")
@@ -157,10 +155,9 @@ public abstract class BaseElement
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	@SuppressWarnings("unchecked")
 	public final Object api(String methodName, Object[] args) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
-		Class cls=this.getClass();
+		Class<? extends BaseElement> cls=this.getClass();
 		Method m=cls.getMethod(methodName, new Class[]{Object[].class});
 		return m.invoke(this, new Object[]{args});
 		

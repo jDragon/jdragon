@@ -13,12 +13,11 @@ import com.jdragon.system.form.*;
  * @author raghukr
  *
  */
-@SuppressWarnings("unchecked")
-public class AuthIngredient extends BaseElement
+public class AuthElement extends BaseElement
 {
 	boolean _isValid=false;
 	/* (non-Javadoc)
-	 * @see com.jdragon.system.BaseIngredient#mainCourse(java.util.List)
+	 * @see com.jdragon.system.BaseElement#mainCourse(java.util.List)
 	 */
 	@Override
 	public String mainContent(List<String> args) throws Exception
@@ -46,13 +45,13 @@ public class AuthIngredient extends BaseElement
 	}
 
 	@Override
-	public boolean formSubmit(String formName, HashMap params)
+	public boolean formSubmit(String formName, HashMap<String, String[]> params)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean formValidate(String formName, HashMap params)
+	public boolean formValidate(String formName, HashMap<String, String[]> params)
 	{
 		if(((String[])params.get("FORMNAME"))[0].equals("loginForm"))
 		{

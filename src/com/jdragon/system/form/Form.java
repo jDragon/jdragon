@@ -2,11 +2,10 @@ package com.jdragon.system.form;
 
 import java.util.*;
 
-@SuppressWarnings("unchecked")
 public class Form
 {
 	private String _name="";
-	private List _elements=new ArrayList();
+	private List<FormComponent> _elements=new ArrayList<FormComponent>();
 
 	public String getName()
 	{
@@ -23,7 +22,7 @@ public class Form
 		_elements.add(comp);
 	}
 	
-	public String Render(HashMap errorMap)
+	public String Render(HashMap<String, String> errorMap)
 	{
 		String str="";
 		for(int i=0; i<_elements.size(); i++)

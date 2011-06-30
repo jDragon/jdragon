@@ -22,11 +22,10 @@ public class CustomElementTest extends BaseElement
 	/* (non-Javadoc)
 	 * @see com.jdragon.system.Ingredient#content()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public String mainContent(List<String> args) throws Exception 
 	{
-		HashMap vars = new HashMap();
+		HashMap<String, Object> vars = new HashMap<String, Object>();
 
 		if(this.submitted())
 		{
@@ -72,14 +71,13 @@ public class CustomElementTest extends BaseElement
 		return new String[]{"/Index/%/view", "/Indextest"};
 	}
 
-	@SuppressWarnings("unchecked")
 	public Form form(String formName)
 	{
 		Form form=new Form();
 		form.addComponent(new TextBox("num1").title("Number 1").value(""));
 		form.addComponent(new TextBox("num2").title("Number 2").value(""));
 		
-		JDHashMap selMap=new JDHashMap();
+		JDHashMap<String, String> selMap=new JDHashMap<String, String>();
 		selMap.add("1", "1").add("2", "2");
 		
 		form.addComponent(new Select("select1").title("Select").value(selMap));
@@ -88,12 +86,11 @@ public class CustomElementTest extends BaseElement
 		return form;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public boolean formValidate(String formName, HashMap params)
+	public boolean formValidate(String formName, HashMap<String, String[]> params)
 	{
-	    String val1 = ((String[])params.get("num1"))[0];
-	    String val2 = ((String[])params.get("num2"))[0];
+	    String val1 = params.get("num1")[0];
+	    String val2 = params.get("num2")[0];
 	    boolean ret=true;
 		try
 		{
@@ -114,16 +111,15 @@ public class CustomElementTest extends BaseElement
 		return ret;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean formSubmit(String formName, HashMap params)
+	public boolean formSubmit(String formName, HashMap<String, String[]> params)
 	{
-	     String val1 = ((String[])params.get("num1"))[0];
-	     String val2 = ((String[])params.get("num2"))[0];
-	     int ival1=Integer.parseInt(val1);
-	     int ival2=Integer.parseInt(val2);
-	     
-	     _sum=(new Integer(ival1+ival2)).toString();
-	     
-	     return true;
+		String val1 = params.get("num1")[0];
+		String val2 = params.get("num2")[0];
+		int ival1=Integer.parseInt(val1);
+		int ival2=Integer.parseInt(val2);
+		 
+		_sum=(new Integer(ival1+ival2)).toString();
+		 
+		return true;
 	}
 }

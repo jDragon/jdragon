@@ -2,13 +2,14 @@ package com.jdragon.system.form;
 
 import java.util.*;
 
-@SuppressWarnings({"unchecked", "unused"})
+@SuppressWarnings({"unused"})
 public abstract class FormComponent
 {
-	private Map _hashMap=new HashMap();
 	
 	private String _type, _name, _title, _value;
 	
+/*
+	private Map _hashMap=new HashMap();
 	public String get(Object key)
 	{
 		return (String)_hashMap.get(key);
@@ -18,7 +19,7 @@ public abstract class FormComponent
 	{
 		return _hashMap.put(key, value);
 	}
-
+*/
 	public FormComponent(String name)
 	{
 		_name=name;
@@ -38,6 +39,6 @@ public abstract class FormComponent
 	public abstract FormComponent value(Object valueStr);
 	public abstract Object value();
 	
-	public abstract String Render(HashMap errorMap);
+	public abstract String Render(HashMap<String, String> errorMap);
 	
 }

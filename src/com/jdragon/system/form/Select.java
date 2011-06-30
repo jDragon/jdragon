@@ -11,7 +11,7 @@ public class Select extends FormComponent
 	
 	public Select(String name){super(name); super.type("select");}
 	@Override
-	public String Render(HashMap errorMap)
+	public String Render(HashMap<String, String> errorMap)
 	{
 		XMLBuilder builder = new XMLBuilder();
 		builder
@@ -35,7 +35,7 @@ public class Select extends FormComponent
 	@Override
 	public FormComponent value(Object valueMap) throws ClassCastException
 	{
-		_value=(HashMap)valueMap;
+		_value=(HashMap<String, String>)valueMap;
 		return this;
 	}
 	@Override
