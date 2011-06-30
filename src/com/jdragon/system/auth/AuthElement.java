@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.jdragon.system.BaseElement;
+import com.jdragon.system.PageHandler;
 import com.jdragon.system.form.*;
 
 /**
@@ -58,7 +59,7 @@ public class AuthElement extends BaseElement
 			if(((String[])params.get("username"))[0].equals("test") && ((String[])params.get("passwd"))[0].equals("Password"))
 				_isValid=true;
 			else
-				this.setFormError("passwd", "Invalid credentials!");
+				PageHandler.setFormError("passwd", "Invalid credentials!");
 			return _isValid;
 		}
 		return false;

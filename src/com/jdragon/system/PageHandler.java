@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import freemarker.template.TemplateException;
  * @author raghukr
  *
  */
-public class TemplateHandler 
+public class PageHandler 
 {
 	public static String processTemplate(Map<String, Object> vars, String templateName) throws IOException, TemplateException
 	{
@@ -35,8 +36,10 @@ public class TemplateHandler
 //			cssStr=cssStr+"@import url(\""+cssList.get(i)+"\");";
 			cssStr=cssStr+"<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssList.get(i) + "\" />";
 		}
-		
 		vars.put("css", cssStr);
+
+		List<String> errList=StaticContent.getErrorList();
+		vars.put("errors", errList);
 
 		
 		Writer writer=new StringWriter();
@@ -64,31 +67,45 @@ public class TemplateHandler
 	{
 		StaticContent.addJS(jsStr);
 	}
+	
+	public static void setError(String errStr)
+	{
+		StaticContent.setError(errStr);
+	}
+	
+	public static void setFormError(String title, String message)
+	{
+		StaticContent.setFormError(title, message);
+	}
+	
+	public static Map<String, String> getFormErrorMap()
+	{
+		return StaticContent.getFormErrorMap();
+	}
 }
 
 class StaticContent
 {
 	private static ThreadLocal<List<String>> tlCssList= new ThreadLocal<List<String>>();
 	private static ThreadLocal<List<String>> tlJsList= new ThreadLocal<List<String>>();
+	private static ThreadLocal<List<String>> tlErrList= new ThreadLocal<List<String>>();
+	private static ThreadLocal<Map<String, String>> formErrMap= new ThreadLocal<Map<String, String>>();
 	
-	public static void init()
+	static void init()
 	{
 		tlCssList.set(new ArrayList<String>());
 		tlJsList.set(new ArrayList<String>());
+		tlErrList.set(new ArrayList<String>());
+		formErrMap.set(new HashMap<String, String>());
 	}
 	
-	public static void addJS(String jsStr)
+	static void addJS(String jsStr)
 	{
 		List<String> jsList=tlJsList.get();
-		if(jsList==null)
-		{
-			jsList=new ArrayList<String>();
-			tlJsList.set(jsList);
-		}
 		jsList.add(jsStr);
 	}
 
-	public static void addCSS(String cssStr)
+	static void addCSS(String cssStr)
 	{
 		List<String> cssList=tlCssList.get();
 		if(cssList==null)
@@ -99,14 +116,35 @@ class StaticContent
 		cssList.add(cssStr);
 	}
 	
-	public static List<String> getCSSList()
+	static List<String> getCSSList()
 	{
 		return tlCssList.get();
 	}
 	
-	public static void clear()
+	static List<String> getErrorList()
+	{
+		return tlErrList.get();
+	}
+		static void clear()
 	{
 		tlCssList.remove();
 		tlJsList.remove();
+		tlErrList.remove();
+	}
+	
+	static void setError(String errStr)
+	{
+		tlErrList.get().add(errStr);
+	}
+	
+	static void setFormError(String title, String message)
+	{
+		formErrMap.get().put(title, message);
+		setError(title+": "+message);
+	}
+	
+	static Map<String, String> getFormErrorMap()
+	{
+		return formErrMap.get();
 	}
 }

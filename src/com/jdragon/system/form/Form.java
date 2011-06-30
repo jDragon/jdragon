@@ -22,7 +22,7 @@ public class Form
 		_elements.add(comp);
 	}
 	
-	public String Render(HashMap<String, String> errorMap)
+	public String Render(Map<String, String> errorMap)
 	{
 		String str="";
 		for(int i=0; i<_elements.size(); i++)

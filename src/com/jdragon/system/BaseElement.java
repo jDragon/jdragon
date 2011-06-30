@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,8 +26,6 @@ public abstract class BaseElement
 {
 	protected DBAccess _db=null;
 	private boolean _isPost=false;
-	private HttpServletRequest _request=null;
-	
 	public final boolean submitted()
 	{
 		return _isPost;
@@ -72,34 +71,8 @@ public abstract class BaseElement
 		return originalStr;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected final void setError(String title, String message)
-	{
-		HashMap errMap=(HashMap)_request.getAttribute("_jDr_ErrorMap");
-		if(errMap==null)
-		{
-			errMap=new HashMap();
-			_request.setAttribute("_jDr_ErrorMap", errMap);
-		}
-		errMap.put(title, message);
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected final void setFormError(String title, String message)
-	{
-		HashMap errMap=(HashMap)_request.getAttribute("_jDr_FormErrorMap");
-		if(errMap==null)
-		{
-			errMap=new HashMap();
-			_request.setAttribute("_jDr_FormErrorMap", errMap);
-		}
-		errMap.put(title, message);
-		setError(title, message);
-	}
-
 	public final void setRequest(HttpServletRequest _request)
 	{
-		this._request = _request;
 	}
 	
 /** Form (Post request) processing methods */
@@ -118,7 +91,6 @@ public abstract class BaseElement
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected final String getForm(String formName)
 	{
 		Form form= this.form(formName);
@@ -128,7 +100,7 @@ public abstract class BaseElement
 			return builder.tag("FORM").attr("name", formName).text("The form "+formName+" is Empty ").end().toString();
 		}
 		
-		HashMap<String, String> errMap=(HashMap<String, String>)_request.getAttribute("_jDr_FormErrorMap");
+		Map<String, String> errMap=PageHandler.getFormErrorMap();
 		
 		String formStr=builder
 		.tag("FORM").attr("name", formName).attr("method", "POST")

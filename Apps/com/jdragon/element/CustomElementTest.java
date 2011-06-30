@@ -6,7 +6,7 @@ package com.jdragon.element;
 import java.util.*;
 
 import com.jdragon.system.BaseElement;
-import com.jdragon.system.TemplateHandler;
+import com.jdragon.system.PageHandler;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.*;
 import com.jdragon.util.JDHashMap;
@@ -36,9 +36,9 @@ public class CustomElementTest extends BaseElement
 		vars.put("args", args);
 		vars.put("form", getForm("myForm"));
 
-		this.setError("Test Error", "Test Error Message");
+		PageHandler.setError("Test Error Message");
 
-		return TemplateHandler.processTemplate(vars, "test.ftl");
+		return PageHandler.processTemplate(vars, "test.ftl");
 	}
 
 	public String[] seasoningsList()
@@ -97,7 +97,7 @@ public class CustomElementTest extends BaseElement
 			Integer.parseInt(val1);
 		} catch (NumberFormatException e)
 		{
-			setFormError("num1", "Not a Number");
+			PageHandler.setFormError("num1", "Not a Number");
 			ret=false;
 		}
 		try
@@ -105,7 +105,7 @@ public class CustomElementTest extends BaseElement
 			Integer.parseInt(val2);
 		} catch (NumberFormatException e)
 		{
-			setFormError("num2", "Not a Number");
+			PageHandler.setFormError("num2", "Not a Number");
 			ret=false;
 		}
 		return ret;

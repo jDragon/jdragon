@@ -1,6 +1,6 @@
 package com.jdragon.system.form;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import com.jdragon.util.XMLBuilder;
 
@@ -10,7 +10,7 @@ public class TextBox extends FormComponent
 	
 	public TextBox(String name){super(name); super.type("textbox");}
 	@Override
-	public String Render(HashMap<String, String> errorMap)
+	public String Render(Map<String, String> errorMap)
 	{
 		String compClass="input-"+type();
 		if(errorMap!=null)

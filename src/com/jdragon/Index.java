@@ -42,7 +42,7 @@ public class Index extends HttpServlet
 		DBUtil dbutil = new DBUtil();
 		dbutil.connect();
 		
-		TemplateHandler.init();
+		PageHandler.init();
 		
 //		HttpSession session = request.getSession();
 //		String sessionID = session.getId();
@@ -115,7 +115,7 @@ public class Index extends HttpServlet
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("title", s.getTitle());
 				map.put("data", s.getContent());
-				String str=TemplateHandler.processTemplate(map, "seasonings.ftl");
+				String str=PageHandler.processTemplate(map, "seasonings.ftl");
 				
 				String contentStr=(String)vars.get(sPosition);
 				if(contentStr==null)contentStr="";
@@ -128,9 +128,9 @@ public class Index extends HttpServlet
 			if(errMap!=null)
 				vars.put("errors", errMap);
 
-			TemplateHandler.addCSS("/jdragon/Templates/zengarden-sample.css");
+			PageHandler.addCSS("/jdragon/Templates/zengarden-sample.css");
 			
-			String htmlOut=TemplateHandler.processTemplate(vars, "html.ftl");
+			String htmlOut=PageHandler.processTemplate(vars, "html.ftl");
 			out.println(htmlOut);
 		} 
 		catch (Exception e) 
@@ -140,7 +140,7 @@ public class Index extends HttpServlet
 		}
 		finally
 		{
-			TemplateHandler.cleanup();
+			PageHandler.cleanup();
 		}
 		dbutil.disconnect();
 	}

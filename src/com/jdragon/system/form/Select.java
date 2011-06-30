@@ -11,7 +11,7 @@ public class Select extends FormComponent
 	
 	public Select(String name){super(name); super.type("select");}
 	@Override
-	public String Render(HashMap<String, String> errorMap)
+	public String Render(Map<String, String> errorMap)
 	{
 		XMLBuilder builder = new XMLBuilder();
 		builder
