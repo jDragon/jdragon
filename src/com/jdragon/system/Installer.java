@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.jdragon.system.BaseElement;
 
-public class InstallerIngredient extends BaseElement
+public class Installer extends BaseElement
 {
 	@Override
 	public String mainContent(List<String> args) throws Exception
@@ -13,7 +13,7 @@ public class InstallerIngredient extends BaseElement
 //		String op=args.get(0);
 		String ingrStr=args.get(1);
 		BaseElement ingr=BaseElement.getElementByName(ingrStr);
-		String[] urlpatterns=ingr.getUrlPatterns();
+		String[] urlpatterns=ingr.urlpatterns();
 
 		Connection conn=_db.getConnection();
 		Statement stmt = conn.createStatement();

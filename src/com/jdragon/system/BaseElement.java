@@ -10,9 +10,6 @@ import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.Form;
@@ -54,12 +51,12 @@ public abstract class BaseElement
 		return null;
 	}
 
-	String[] getUrlPatterns()
+	public String[] urlpatterns()
 	{
-		return urlpatterns();
+		return new String[]{};
 	}
-
-	protected String[] urlpatterns()
+	
+	public String[] accessCodes()
 	{
 		return new String[]{};
 	}
@@ -71,9 +68,9 @@ public abstract class BaseElement
 		return originalStr;
 	}
 	
-	public final void setRequest(HttpServletRequest _request)
-	{
-	}
+//	public final void setRequest(HttpServletRequest _request)
+//	{
+//	}
 	
 /** Form (Post request) processing methods */
 	public Form form(String formName)
@@ -100,13 +97,11 @@ public abstract class BaseElement
 			return builder.tag("FORM").attr("name", formName).text("The form "+formName+" is Empty ").end().toString();
 		}
 		
-		Map<String, String> errMap=PageHandler.getFormErrorMap();
-		
 		String formStr=builder
 		.tag("FORM").attr("name", formName).attr("method", "POST")
 			.tag("INPUT").attr("type", "HIDDEN").attr("name", "FORMNAME").attr("value", formName)
 			.end()
-			.text(form.Render(errMap))
+			.text(form.Render())
 		.end()
 		.toString();
 

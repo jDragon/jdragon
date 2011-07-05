@@ -8,10 +8,15 @@ public class XMLBuilder
 	Stack<String> tagStack=new Stack<String>();
 	Stack<Boolean> tagCloseStack=new Stack<Boolean>();
 	
+	int _level=0;
+	
 	public XMLBuilder tag(String name)
 	{
+		_level++;
+
 		checkClosePrev();
 		tagStack.push(name);
+		tabs();
 		append("<"+name);
 		tagCloseStack.push(Boolean.FALSE);
 		
@@ -50,9 +55,13 @@ public class XMLBuilder
 		Boolean isClosed=tagCloseStack.pop();
 		String name=tagStack.pop();
 		if(isClosed.equals(Boolean.TRUE))
+		{
+			tabs();
 			append("</"+name+">");
+		}
 		else
 			append(" />");
+		_level--;
 		
 		return this;
 	}
@@ -66,5 +75,12 @@ public class XMLBuilder
 	private void append(String str)
 	{
 		_str=_str+str;
+	}
+	
+	private void tabs()
+	{
+		append("\n");
+		for(int i=0; i<_level; i++)
+			append("\t");
 	}
 }

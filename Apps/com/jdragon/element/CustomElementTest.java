@@ -6,10 +6,10 @@ package com.jdragon.element;
 import java.util.*;
 
 import com.jdragon.system.BaseElement;
+import com.jdragon.system.JDSession;
 import com.jdragon.system.PageHandler;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.*;
-import com.jdragon.util.JDHashMap;
 
 /**
  * @author raghukr
@@ -53,14 +53,18 @@ public class CustomElementTest extends BaseElement
 		{
 			Chunk s=new Chunk();
 			s.setTitle(_t("Sample 1"));
-			s.setContent("Hello, World!");
+			s.setContent("Hello, World! <br />"
+					+"<a href='/jdragon/login'>Login</a>"
+					);
 			return s;
 		}
 		if(name.equals("sample2"))
 		{
 			Chunk s=new Chunk();
 			s.setTitle(_t("Sample 2"));
-			s.setContent("Have a good day!");
+			s.setContent("Have a good day! <br />"
+					+ "Your role: " + JDSession.getUserRole()
+					);
 			return s;
 		}
 		return null;
@@ -77,10 +81,11 @@ public class CustomElementTest extends BaseElement
 		form.addComponent(new TextBox("num1").title("Number 1").value(""));
 		form.addComponent(new TextBox("num2").title("Number 2").value(""));
 		
-		JDHashMap<String, String> selMap=new JDHashMap<String, String>();
-		selMap.add("1", "1").add("2", "2");
-		
-		form.addComponent(new Select("select1").title("Select").value(selMap));
+		form.addComponent(new Select("select1")
+							.add("+", "Add")
+							.add("-", "Subtract")
+							.title("Select")
+		);
 		
 		form.addComponent(new Submit("submitbtn").title("Go!"));
 		return form;
@@ -97,7 +102,7 @@ public class CustomElementTest extends BaseElement
 			Integer.parseInt(val1);
 		} catch (NumberFormatException e)
 		{
-			PageHandler.setFormError("num1", "Not a Number");
+			Form.setError("num1", "Not a Number");
 			ret=false;
 		}
 		try
@@ -105,7 +110,7 @@ public class CustomElementTest extends BaseElement
 			Integer.parseInt(val2);
 		} catch (NumberFormatException e)
 		{
-			PageHandler.setFormError("num2", "Not a Number");
+			Form.setError("num2", "Not a Number");
 			ret=false;
 		}
 		return ret;
@@ -117,9 +122,11 @@ public class CustomElementTest extends BaseElement
 		String val2 = params.get("num2")[0];
 		int ival1=Integer.parseInt(val1);
 		int ival2=Integer.parseInt(val2);
-		 
-		_sum=(new Integer(ival1+ival2)).toString();
-		 
+		
+		if(params.get("select1")[0].equals("+"))
+			_sum=(new Integer(ival1+ival2)).toString();
+		else
+			_sum=(new Integer(ival1-ival2)).toString();
 		return true;
 	}
 }

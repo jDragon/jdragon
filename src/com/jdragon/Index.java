@@ -11,6 +11,7 @@ import javax.servlet.http.*;
 import com.jdragon.system.*;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.chunk.ChunkEntry;
+import com.jdragon.system.form.Form;
 
 /**
  * @author raghukr
@@ -43,6 +44,8 @@ public class Index extends HttpServlet
 		dbutil.connect();
 		
 		PageHandler.init();
+		Form.init();
+		JDSession.init(request);
 		
 //		HttpSession session = request.getSession();
 //		String sessionID = session.getId();
@@ -69,7 +72,6 @@ public class Index extends HttpServlet
 			if(ingr==null)
 			{
 				ingr=new JDErrorHandler();
-				ingr.setRequest(request);
 				ingr.setDB(dbutil);
 			}
 			
@@ -89,6 +91,7 @@ public class Index extends HttpServlet
 					String paramName = paramNames.nextElement();
 					String[] paramValues = request.getParameterValues(paramName);
 					params.put(paramName, paramValues);
+					Form.setFormValues(params);
 				}
 				
 				ingr = getElement(reqURI, request, dbutil);
@@ -135,7 +138,6 @@ public class Index extends HttpServlet
 		} 
 		catch (Exception e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally
@@ -160,7 +162,7 @@ public class Index extends HttpServlet
 	{
 		processRequests(request, response);
 	}
-
+	
 	private BaseElement getElement(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		return getIngredientByName(RouteHandler.getIngredientName(path, db), request, db);
@@ -169,7 +171,6 @@ public class Index extends HttpServlet
 	private BaseElement getIngredientByName(String name, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		BaseElement inst=BaseElement.getElementByName(name);
-		inst.setRequest(request);
 		inst.setDB(db);
 
 		return inst;

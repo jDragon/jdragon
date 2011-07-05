@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.jdragon.system.BaseElement;
-import com.jdragon.system.PageHandler;
+import com.jdragon.system.JDSession;
 import com.jdragon.system.form.*;
 
 /**
@@ -23,10 +23,15 @@ public class AuthElement extends BaseElement
 	@Override
 	public String mainContent(List<String> args) throws Exception
 	{
+		Boolean isLoggedIn=(Boolean)api("isLoggedIn", null);
+		
 		if(this.submitted() && _isValid)
 		{
 			return "Login Successful";
 		}
+
+		if(isLoggedIn.equals(Boolean.TRUE))
+			return "Already Logged in";
 
 		return getForm("loginForm");
 	}
@@ -48,6 +53,7 @@ public class AuthElement extends BaseElement
 	@Override
 	public boolean formSubmit(String formName, HashMap<String, String[]> params)
 	{
+		JDSession.setCredentials(params.get("username")[0], "1", "authenticated");
 		return false;
 	}
 
@@ -59,16 +65,22 @@ public class AuthElement extends BaseElement
 			if(((String[])params.get("username"))[0].equals("test") && ((String[])params.get("passwd"))[0].equals("Password"))
 				_isValid=true;
 			else
-				PageHandler.setFormError("passwd", "Invalid credentials!");
+				Form.setError("passwd", "Invalid credentials!");
 			return _isValid;
 		}
 		return false;
 	}
 
 	@Override
-	protected String[] urlpatterns()
+	public String[] urlpatterns()
 	{
 		return new String[]{"/login"};
 	}
-
+	
+	public Boolean isLoggedIn(Object[] o)
+	{
+		if(JDSession.getUser()!=null)
+			return Boolean.TRUE;
+		return Boolean.FALSE;
+	}
 }
