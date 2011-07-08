@@ -23,17 +23,32 @@ public class AuthElement extends BaseElement
 	@Override
 	public String mainContent(List<String> args) throws Exception
 	{
-		Boolean isLoggedIn=(Boolean)api("isLoggedIn", null);
+		if(args.size()<=0)
+			return "Invalid Arguments";
 		
-		if(this.submitted() && _isValid)
+		if("login".equals(args.get(0)))
 		{
-			return "Login Successful";
+			Boolean isLoggedIn=(Boolean)api("isLoggedIn", null);
+			
+			if(this.submitted() && _isValid)
+			{
+				return "Login Successful";
+			}
+
+			if(isLoggedIn.equals(Boolean.TRUE))
+				return "Already Logged in";
+
+			return getForm("loginForm");
 		}
+		else if("logout".equals(args.get(0)))
+		{
+			JDSession.destroy();
+			JDSession.requestRedirect("/jdragon/login");
+			return "";//"Successfully Logged out";
+		}
+		
+		return "Something wrong here";
 
-		if(isLoggedIn.equals(Boolean.TRUE))
-			return "Already Logged in";
-
-		return getForm("loginForm");
 	}
 
 	@Override
@@ -74,7 +89,7 @@ public class AuthElement extends BaseElement
 	@Override
 	public String[] urlpatterns()
 	{
-		return new String[]{"/login"};
+		return new String[]{"/login", "/logout"};
 	}
 	
 	public Boolean isLoggedIn(Object[] o)

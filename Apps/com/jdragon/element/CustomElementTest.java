@@ -51,11 +51,19 @@ public class CustomElementTest extends BaseElement
 	{
 		if(name.equals("sample1"))
 		{
+			Boolean isLoggedIn=Boolean.FALSE;
+			try {
+				BaseElement elem=BaseElement.getElementByName("com.jdragon.system.auth.AuthElement");
+				isLoggedIn=(Boolean)elem.api("isLoggedIn", null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			String lnk=isLoggedIn.equals(Boolean.FALSE)?"<a href='/jdragon/login'>Login</a>":"<a href='/jdragon/logout'>Logout</a>";
+			
 			Chunk s=new Chunk();
 			s.setTitle(_t("Sample 1"));
-			s.setContent("Hello, World! <br />"
-					+"<a href='/jdragon/login'>Login</a>"
-					);
+			s.setContent("Hello, World! <br />" + lnk);
 			return s;
 		}
 		if(name.equals("sample2"))
@@ -82,8 +90,8 @@ public class CustomElementTest extends BaseElement
 		form.addComponent(new TextBox("num2").title("Number 2").value(""));
 		
 		form.addComponent(new Select("select1")
-							.add("+", "Add")
-							.add("-", "Subtract")
+							.option("+", "Add")
+							.selectedoption("-", "Subtract")
 							.title("Select")
 		);
 		

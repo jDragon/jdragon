@@ -6,37 +6,40 @@ import com.jdragon.util.XMLBuilder;
 
 public class Select extends FormComponent
 {
-	Map<String, String> _value=null;
-	private List<String> _keys=new ArrayList<String>();
-	private List<String> _values=new ArrayList<String>();
+	private List<String> _optionkeys=new ArrayList<String>();
+	private List<String> _optionvalues=new ArrayList<String>();
+	private List<String> _selected=new ArrayList<String>();
 	
-	private String _selected="";
+	private boolean _multiselect=false;
 	
-	public Select(String name){super(name); super.type("select");}
+	
+	public Select(String name)
+	{
+		super(name); super.type("select");
+	}
+	
 	@Override
 	public String Render()
 	{
-		Map<String, String[]> valueMap=Form.getFormValues();
-		if(valueMap!=null)
-		{
-			String[] valArr= valueMap.get(name());
-			if(valArr!=null && valArr.length>0)
-				_selected=valArr[0];
-		}
-		
+		if(value()!=null)
+			_selected=new ArrayList<String>(Arrays.asList((String[])value()));
+
 		XMLBuilder builder = new XMLBuilder();
 		builder
 		.tag("div")
 			.tag("label").text(title()).end()
 			.tag("div")
 				.tag("select").attr("name", name());
-
-					for(int i=0; i<_keys.size(); i++)
+					
+					if(multiSelect())
+						builder.attr("multiple", "multiple");
+		
+					for(int i=0; i<_optionkeys.size(); i++)
 					{
-						builder.tag("option").attr("value", _keys.get(i));
-						if(_keys.get(i).equals(_selected))
+						builder.tag("option").attr("value", _optionkeys.get(i));
+						if(isSelected(_optionkeys.get(i)))
 							builder.attr("selected", "selected");
-						builder.text(_values.get(i)).end();
+						builder.text(_optionvalues.get(i)).end();
 					}
 
 				builder
@@ -46,23 +49,40 @@ public class Select extends FormComponent
 		
 		return builder.toString();
 	}
+	
 	@Override
-	public FormComponent value(Object value) throws ClassCastException
+	protected boolean multiValued()
 	{
-		_selected=(String)value;
-		return this;
-	}
-	@Override
-	public Object value()
-	{
-		return _selected;
+		return true;
 	}
 	
-	public Select add(String k, String v)
+	public Select option(String k, String v)
 	{
 		if(k==null)k="";
 		if(v==null)v="";
-		_keys.add(k); _values.add(v);
+		_optionkeys.add(k); _optionvalues.add(v);
 		return this;
+	}
+
+	public Select selectedoption(String k, String v)
+	{
+		option(k, v);
+		_selected.add(k);
+		return this;
+	}
+
+	public void multiSelect(boolean isMulti)
+	{
+		_multiselect=isMulti;
+	}
+
+	public boolean multiSelect()
+	{
+		return _multiselect;
+	}
+	
+	private boolean isSelected(String key)
+	{
+		return _selected.contains(key);
 	}
 }

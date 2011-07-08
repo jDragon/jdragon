@@ -2,27 +2,24 @@ package com.jdragon.system.form;
 
 import java.util.*;
 
-@SuppressWarnings({"unused"})
 public abstract class FormComponent
 {
 	
-	private String _type, _name, _title, _value;
+	private String _type, _name, _title;
+	protected Map<String, String> _errorMap=null;
+	protected Map<String, String[]> _valueMap=null;
+	private Object _value=null;
 	
-/*
-	private Map _hashMap=new HashMap();
-	public String get(Object key)
-	{
-		return (String)_hashMap.get(key);
-	}
-
-	public Object put(Object key, Object value)
-	{
-		return _hashMap.put(key, value);
-	}
-*/
 	public FormComponent(String name)
 	{
 		_name=name;
+		_errorMap=Form.getErrorMap();
+		_valueMap=Form.getFormValues();
+	}
+	
+	protected String getError()
+	{
+		return _errorMap.get(name());
 	}
 
 	protected void type(String type) { _type=type; }
@@ -36,8 +33,26 @@ public abstract class FormComponent
 		return this;
 	}
 	
-	public abstract FormComponent value(Object valueStr);
-	public abstract Object value();
+	public FormComponent value(Object valueObj)
+	{
+		_value=valueObj;
+		return this;
+	}
+	
+	public Object value()
+	{
+		if(_valueMap.get(name())!=null)
+			if(multiValued())
+				_value=_valueMap.get(name());
+			else
+				_value=((String[])_valueMap.get(name()))[0];
+		return _value;
+	}
+	
+	protected boolean multiValued()
+	{
+		return false;
+	}
 	
 	public abstract String Render();
 	

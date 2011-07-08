@@ -8,6 +8,7 @@ public class JDSession
 	private String sessionUser=null;
 	private String userRole=null;
 	private String userID=null;
+	private HttpSession _session=null;
 	
 	public static String getUser() {
 		
@@ -30,17 +31,45 @@ public class JDSession
 	}
 	
 	private static ThreadLocal<JDSession> jdSessHolder = new ThreadLocal<JDSession>();
+	private static ThreadLocal<String> redirURLHolder = new ThreadLocal<String>();
 	
 	public static void init(HttpServletRequest request)
 	{
 		HttpSession session = request.getSession();
-		Object sessionObj=session.getAttribute("JDSession");
+		JDSession sessionObj=(JDSession)session.getAttribute("JDSession");
 		if(sessionObj==null)
 		{
 			sessionObj=new JDSession();
 			session.setAttribute("JDSession", sessionObj);
+			sessionObj._session=session;
 		}
+
+		jdSessHolder.set(sessionObj);
 		
-		jdSessHolder.set((JDSession)sessionObj);
+		redirURLHolder.set("");
+	}
+	
+	public static void destroy()
+	{
+		JDSession jdsession=jdSessHolder.get();
+		if(jdsession!=null)
+		{
+			if(jdsession._session!=null)
+			{
+				jdsession._session.removeAttribute("JDSession");
+				jdsession._session.invalidate();
+			}
+			jdSessHolder.remove();
+		}
+	}
+	
+	public static void requestRedirect(String url)
+	{
+		redirURLHolder.set(url);
+	}
+	
+	public static String getRedirectURL()
+	{
+		return redirURLHolder.get();
 	}
 }

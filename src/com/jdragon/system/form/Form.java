@@ -62,5 +62,6 @@ public class Form
 	public static void init()
 	{
 		formErrMap.set(new HashMap<String, String>());
+		formValues.set(new HashMap<String, String[]>());
 	}
 }

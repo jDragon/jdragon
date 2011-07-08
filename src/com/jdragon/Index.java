@@ -105,6 +105,10 @@ public class Index extends HttpServlet
 			vars.put("content", ingr.mainContent(list));
 			vars.put("title", "Main Content");
 			
+			String redirURL=JDSession.getRedirectURL();
+			if(redirURL!=null && !redirURL.equals(""))
+				response.sendRedirect(redirURL);
+			
 			List<ChunkEntry> seList=getChunks("", dbutil);
 			for(int indx=0; indx<seList.size(); indx++)
 			{
