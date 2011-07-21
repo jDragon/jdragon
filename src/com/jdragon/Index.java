@@ -40,8 +40,7 @@ public class Index extends HttpServlet
 			throws ServletException, IOException
 	{
 		String method=request.getMethod();
-		DBUtil dbutil = new DBUtil();
-		dbutil.connect();
+		DBAccess.connect();
 		
 		PageHandler.init();
 		Form.init();
@@ -64,7 +63,7 @@ public class Index extends HttpServlet
 			BaseElement ingr = null;
 			try
 			{
-				ingr = getElement(reqURI, request, dbutil);
+				ingr = getElement(reqURI, request);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -72,7 +71,6 @@ public class Index extends HttpServlet
 			if(ingr==null)
 			{
 				ingr=new JDErrorHandler();
-				ingr.setDB(dbutil);
 			}
 			
 			if(method.equals("POST"))
@@ -94,7 +92,7 @@ public class Index extends HttpServlet
 					Form.setFormValues(params);
 				}
 				
-				ingr = getElement(reqURI, request, dbutil);
+				ingr = getElement(reqURI, request);
 				if(ingr.formValidate(formName, params)==true)
 					ingr.formSubmit(formName, params);
 				
@@ -109,14 +107,14 @@ public class Index extends HttpServlet
 			if(redirURL!=null && !redirURL.equals(""))
 				response.sendRedirect(redirURL);
 			
-			List<ChunkEntry> seList=getChunks("", dbutil);
+			List<ChunkEntry> seList=getChunks("");
 			for(int indx=0; indx<seList.size(); indx++)
 			{
 				ChunkEntry se=seList.get(indx);
 				String sPosition=se.getPosition();
 				String sName=se.getName();
 				String sIngrName=se.getChunk();
-				BaseElement sIngr=getIngredientByName(sIngrName, request, dbutil);
+				BaseElement sIngr=getIngredientByName(sIngrName, request);
 				
 				Chunk s=sIngr.chunk(sName);
 				Map<String, Object> map=new HashMap<String, Object>();
@@ -148,7 +146,7 @@ public class Index extends HttpServlet
 		{
 			PageHandler.cleanup();
 		}
-		dbutil.disconnect();
+		DBAccess.disconnect();
 	}
 
 	/**
@@ -167,25 +165,24 @@ public class Index extends HttpServlet
 		processRequests(request, response);
 	}
 	
-	private BaseElement getElement(String path, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	private BaseElement getElement(String path, HttpServletRequest request) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
-		return getIngredientByName(RouteHandler.getIngredientName(path, db), request, db);
+		return getIngredientByName(RouteHandler.getIngredientName(path), request);
 	}
 
-	private BaseElement getIngredientByName(String name, HttpServletRequest request, DBAccess db) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	private BaseElement getIngredientByName(String name, HttpServletRequest request) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		BaseElement inst=BaseElement.getElementByName(name);
-		inst.setDB(db);
 
 		return inst;
 	}
 
-	private List<ChunkEntry> getChunks(String path, DBAccess db) throws SQLException
+	private List<ChunkEntry> getChunks(String path) throws SQLException
 	{
 		List<ChunkEntry> seList = new ArrayList<ChunkEntry>();
-		Connection conn=db.getConnection();
+		Connection conn=DBAccess.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql=db.resolvePrefix("select * from [seasonings]");
+		String sql=DBAccess.resolvePrefix("select * from [seasonings]");
 		ResultSet rs=stmt.executeQuery(sql);
 		while (rs.next())
 		{

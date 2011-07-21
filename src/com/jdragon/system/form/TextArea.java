@@ -2,11 +2,11 @@ package com.jdragon.system.form;
 
 import com.jdragon.util.XMLBuilder;
 
-public class TextBox extends FormComponent
+public class TextArea extends FormComponent
 {
 //	String _value="";
 	
-	public TextBox(String name){super(name); super.type("textbox");}
+	public TextArea(String name){super(name); super.type("textarea");}
 	@Override
 	public String Render()
 	{
@@ -24,7 +24,8 @@ public class TextBox extends FormComponent
 		.div()
 			.label().text(title()).end()
 			.div()
-				.input().type(type()).name(name()).value((String) value()).cssclass(compClass)
+				.input().type(type()).name(name()).cssclass(compClass)
+					.text((String) value())
 				.end()
 			.enddiv()
 		.enddiv();

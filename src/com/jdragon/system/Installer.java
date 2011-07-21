@@ -15,7 +15,7 @@ public class Installer extends BaseElement
 		BaseElement ingr=BaseElement.getElementByName(ingrStr);
 		String[] urlpatterns=ingr.urlpatterns();
 
-		Connection conn=_db.getConnection();
+		Connection conn=DBAccess.getConnection();
 		Statement stmt = conn.createStatement();
 		String sql="delete from jd_routes where ingredient='"+ingrStr+"'";;
 		stmt.execute(sql);

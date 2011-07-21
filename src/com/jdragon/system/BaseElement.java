@@ -21,7 +21,6 @@ import com.jdragon.util.XMLBuilder;
  */
 public abstract class BaseElement 
 {
-	protected DBAccess _db=null;
 	private boolean _isPost=false;
 	public final boolean submitted()
 	{
@@ -31,11 +30,6 @@ public abstract class BaseElement
 	public final void setSubmit(boolean post)
 	{
 		_isPost = post;
-	}
-
-	public final void setDB(DBAccess _db)
-	{
-		this._db = _db;
 	}
 
 	public abstract String mainContent(List<String> args) throws Exception;

@@ -83,4 +83,49 @@ public class XMLBuilder
 		for(int i=0; i<_level; i++)
 			append("\t");
 	}
+	
+	public XMLBuilder div()
+	{
+		return tag("div");
+	}
+	
+	public XMLBuilder input()
+	{
+		return tag("input");
+	}
+	
+	public XMLBuilder label()
+	{
+		return tag("label");
+	}
+	
+	public XMLBuilder id(String value)
+	{
+		return attr("id", value);
+	}
+	
+	public XMLBuilder name(String value)
+	{
+		return attr("name", value);
+	}
+
+	public XMLBuilder cssclass(String value)
+	{
+		return attr("class", value);
+	}
+
+	public XMLBuilder type(String value)
+	{
+		return attr("type", value);
+	}
+
+	public XMLBuilder value(String value)
+	{
+		return attr("value", value);
+	}
+
+	public XMLBuilder enddiv()
+	{
+		return end();
+	}
 }

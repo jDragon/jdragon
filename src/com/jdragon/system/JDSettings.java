@@ -11,37 +11,37 @@ import java.util.regex.*;
  * @author raghukr
  *
  */
-public class RouteHandler
+public class JDSettings
 {
-	private static Hashtable<String, String> _routeHash=null;
+	private static Hashtable<String, String> _settingsHash=null;
 	
-	public static String getIngredientName(String path) throws SQLException
+	public static String getSetting(String name) throws SQLException
 	{
-		if(_routeHash==null)
+		if(_settingsHash==null)
 		{
-			_routeHash=new Hashtable<String, String>();
-			initRoutes();
+			_settingsHash=new Hashtable<String, String>();
+			initSettings();
 		}
-		for(String key : _routeHash.keySet())
+		for(String key : _settingsHash.keySet())
 		{
-			if(match(key, path))
-				return _routeHash.get(key);
+			if(match(key, name))
+				return _settingsHash.get(key);
 		}
 		return "";
 	}
 	
-	private static void initRoutes() throws SQLException
+	private static void initSettings() throws SQLException
 	{
 		Connection conn=DBAccess.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql=DBAccess.resolvePrefix("select * from [routes]");
+		String sql=DBAccess.resolvePrefix("select * from [settings]");
 		ResultSet rs=stmt.executeQuery(sql);
 		String ingr="", path="";
 		while (rs.next())
 		{
 			  path = rs.getString("path");
 			  ingr = rs.getString("ingredient");
-			  _routeHash.put(path, ingr);
+			  _settingsHash.put(path, ingr);
 		}
 	}
 	

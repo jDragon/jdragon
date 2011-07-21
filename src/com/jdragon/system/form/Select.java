@@ -26,10 +26,10 @@ public class Select extends FormComponent
 
 		XMLBuilder builder = new XMLBuilder();
 		builder
-		.tag("div")
-			.tag("label").text(title()).end()
-			.tag("div")
-				.tag("select").attr("name", name());
+		.div()
+			.label().text(title()).end()
+			.div()
+				.tag("select").name(name());
 					
 					if(multiSelect())
 						builder.attr("multiple", "multiple");
@@ -44,8 +44,8 @@ public class Select extends FormComponent
 
 				builder
 				.end()
-			.end()
-		.end();
+			.enddiv()
+		.enddiv();
 		
 		return builder.toString();
 	}
