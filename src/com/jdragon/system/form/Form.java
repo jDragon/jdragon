@@ -11,17 +11,17 @@ public class Form
 
 	private String _name="";
 	private List<FormComponent> _elements=new ArrayList<FormComponent>();
+	
+	public Form(String name)
+	{
+		_name=name;
+	}
 
-	public String getName()
+	public String name()
 	{
 		return _name;
 	}
 
-	public void setName(String _name)
-	{
-		this._name = _name;
-	}
-	
 	public void addComponent(FormComponent comp)
 	{
 		_elements.add(comp);

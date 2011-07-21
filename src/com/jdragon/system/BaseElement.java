@@ -13,7 +13,6 @@ import java.util.List;
 
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.Form;
-import com.jdragon.util.XMLBuilder;
 
 /**
  * @author raghukr
@@ -62,45 +61,41 @@ public abstract class BaseElement
 		return originalStr;
 	}
 	
-//	public final void setRequest(HttpServletRequest _request)
-//	{
-//	}
-	
 /** Form (Post request) processing methods */
-	public Form form(String formName)
+	public Form getForm(String formName)
 	{
 		return null;
 	}
 
-	public boolean formValidate(String formName, HashMap<String, String[]> params)
+	public boolean validateForm(String formName, HashMap<String, String[]> params)
 	{
 		return true;
 	}
 
-	public boolean formSubmit(String formName, HashMap<String, String[]> params)
+	public boolean submitForm(String formName, HashMap<String, String[]> params)
 	{
 		return false;
 	}
 
-	protected final String getForm(String formName)
-	{
-		Form form= this.form(formName);
-		XMLBuilder builder=new XMLBuilder();
-		if(form==null)
-		{
-			return builder.tag("FORM").attr("name", formName).text("The form "+formName+" is Empty ").end().toString();
-		}
-		
-		String formStr=builder
-		.tag("FORM").attr("name", formName).attr("method", "POST")
-			.tag("INPUT").attr("type", "HIDDEN").attr("name", "FORMNAME").attr("value", formName)
-			.end()
-			.text(form.Render())
-		.end()
-		.toString();
-
-		return formStr;
-	}
+//	protected final String getForm(String formName)
+//	{
+//		Form form= this.form(formName);
+//		XMLBuilder builder=new XMLBuilder();
+//		if(form==null)
+//		{
+//			return builder.tag("FORM").name(formName).text("The form "+formName+" is Empty ").end().toString();
+//		}
+//		
+//		String formStr=builder
+//		.tag("FORM").attr("name", formName).attr("method", "POST")
+//			.input().type("HIDDEN").name("FORMNAME").value(formName)
+//			.end()
+//			.text(form.Render())
+//		.end()
+//		.toString();
+//
+//		return formStr;
+//	}
 /** Form (Post request) processing methods ends*/
 	
 	/**

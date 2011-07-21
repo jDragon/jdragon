@@ -50,6 +50,7 @@ public class DBAccess
             }
             catch (Exception e) { /* ignore close errors */ }
         }
+		tlConnection.remove();
 	}
 
 	public static Connection getConnection() 

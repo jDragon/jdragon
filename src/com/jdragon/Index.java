@@ -93,8 +93,8 @@ public class Index extends HttpServlet
 				}
 				
 				ingr = getElement(reqURI, request);
-				if(ingr.formValidate(formName, params)==true)
-					ingr.formSubmit(formName, params);
+				if(ingr.validateForm(formName, params)==true)
+					ingr.submitForm(formName, params);
 				
 				ingr.setSubmit(true);
 			}

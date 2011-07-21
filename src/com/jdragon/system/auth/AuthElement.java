@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.jdragon.system.BaseElement;
 import com.jdragon.system.JDSession;
+import com.jdragon.system.Render;
 import com.jdragon.system.form.*;
 
 /**
@@ -37,8 +38,10 @@ public class AuthElement extends BaseElement
 
 			if(isLoggedIn.equals(Boolean.TRUE))
 				return "Already Logged in";
+			
+			Form loginForm=getForm("loginForm");
 
-			return getForm("loginForm");
+			return Render.form(loginForm);
 		}
 		else if("logout".equals(args.get(0)))
 		{
@@ -52,11 +55,11 @@ public class AuthElement extends BaseElement
 	}
 
 	@Override
-	public Form form(String formName)
+	public Form getForm(String formName)
 	{
 		if(formName.equals("loginForm"))
 		{
-			Form frm=new Form();
+			Form frm=new Form(formName);
 			frm.addComponent(new TextBox("username").title("User Name"));
 			frm.addComponent(new Password("passwd").title("Password"));
 			frm.addComponent(new Submit("Submit").title("Go!"));
@@ -66,14 +69,14 @@ public class AuthElement extends BaseElement
 	}
 
 	@Override
-	public boolean formSubmit(String formName, HashMap<String, String[]> params)
+	public boolean submitForm(String formName, HashMap<String, String[]> params)
 	{
 		JDSession.setCredentials(params.get("username")[0], "1", "authenticated");
 		return false;
 	}
 
 	@Override
-	public boolean formValidate(String formName, HashMap<String, String[]> params)
+	public boolean validateForm(String formName, HashMap<String, String[]> params)
 	{
 		if(((String[])params.get("FORMNAME"))[0].equals("loginForm"))
 		{

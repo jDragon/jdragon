@@ -8,6 +8,7 @@ import java.util.*;
 import com.jdragon.system.BaseElement;
 import com.jdragon.system.JDSession;
 import com.jdragon.system.PageHandler;
+import com.jdragon.system.Render;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.*;
 
@@ -34,7 +35,7 @@ public class CustomElementTest extends BaseElement
 		vars.put("welcome1", _t("Welcome to ingredient test"));
 		vars.put("welcome2", _t("Hello, How are you?"));
 		vars.put("args", args);
-		vars.put("form", getForm("myForm"));
+		vars.put("form", Render.form(getForm("myForm")));
 
 		PageHandler.setError("Test Error Message");
 
@@ -83,9 +84,9 @@ public class CustomElementTest extends BaseElement
 		return new String[]{"/Index/%/view", "/Indextest"};
 	}
 
-	public Form form(String formName)
+	public Form getForm(String formName)
 	{
-		Form form=new Form();
+		Form form=new Form(formName);
 		form.addComponent(new TextBox("num1").title("Number 1").value(""));
 		form.addComponent(new TextBox("num2").title("Number 2").value(""));
 		
@@ -100,7 +101,7 @@ public class CustomElementTest extends BaseElement
 	}
 	
 	@Override
-	public boolean formValidate(String formName, HashMap<String, String[]> params)
+	public boolean validateForm(String formName, HashMap<String, String[]> params)
 	{
 	    String val1 = params.get("num1")[0];
 	    String val2 = params.get("num2")[0];
@@ -124,7 +125,7 @@ public class CustomElementTest extends BaseElement
 		return ret;
 	}
 
-	public boolean formSubmit(String formName, HashMap<String, String[]> params)
+	public boolean submitForm(String formName, HashMap<String, String[]> params)
 	{
 		String val1 = params.get("num1")[0];
 		String val2 = params.get("num2")[0];
