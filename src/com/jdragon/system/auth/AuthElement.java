@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.jdragon.system.BaseElement;
 import com.jdragon.system.JDSession;
-import com.jdragon.system.Render;
 import com.jdragon.system.form.*;
 
 /**
@@ -41,7 +40,7 @@ public class AuthElement extends BaseElement
 			
 			Form loginForm=getForm("loginForm");
 
-			return Render.form(loginForm);
+			return RenderForm(loginForm);
 		}
 		else if("logout".equals(args.get(0)))
 		{

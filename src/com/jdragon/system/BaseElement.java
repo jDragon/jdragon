@@ -77,25 +77,11 @@ public abstract class BaseElement
 		return false;
 	}
 
-//	protected final String getForm(String formName)
-//	{
-//		Form form= this.form(formName);
-//		XMLBuilder builder=new XMLBuilder();
-//		if(form==null)
-//		{
-//			return builder.tag("FORM").name(formName).text("The form "+formName+" is Empty ").end().toString();
-//		}
-//		
-//		String formStr=builder
-//		.tag("FORM").attr("name", formName).attr("method", "POST")
-//			.input().type("HIDDEN").name("FORMNAME").value(formName)
-//			.end()
-//			.text(form.Render())
-//		.end()
-//		.toString();
-//
-//		return formStr;
-//	}
+	protected final String RenderForm(Form form)
+	{
+		return Render.form(form, this);
+	}
+
 /** Form (Post request) processing methods ends*/
 	
 	/**

@@ -8,7 +8,6 @@ import java.util.*;
 import com.jdragon.system.BaseElement;
 import com.jdragon.system.JDSession;
 import com.jdragon.system.PageHandler;
-import com.jdragon.system.Render;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.*;
 
@@ -35,7 +34,7 @@ public class CustomElementTest extends BaseElement
 		vars.put("welcome1", _t("Welcome to ingredient test"));
 		vars.put("welcome2", _t("Hello, How are you?"));
 		vars.put("args", args);
-		vars.put("form", Render.form(getForm("myForm")));
+		vars.put("form", RenderForm(getForm("myForm")));
 
 		PageHandler.setError("Test Error Message");
 
