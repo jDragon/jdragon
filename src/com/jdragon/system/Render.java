@@ -5,7 +5,7 @@ import com.jdragon.util.XMLBuilder;
 
 public class Render
 {
-	public static String form(Form form, String formHandlerElementName)
+	public static String form(Form form)
 	{
 		XMLBuilder builder=new XMLBuilder();
 
@@ -25,12 +25,6 @@ public class Render
 		.toString();
 
 		return formStr;		
-	}
-
-	public static String form(Form form, BaseElement formHandlerElement)
-	{
-		String elementName=formHandlerElement.getClass().getCanonicalName();
-		return form(form, elementName);
 	}
 
 }

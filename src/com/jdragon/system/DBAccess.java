@@ -28,6 +28,7 @@ public class DBAccess
         	DataSource dataSource =(DataSource)envContext.lookup ("jdbc/jdDB");
         	conn = dataSource.getConnection();
 			tlConnection.set(conn);
+			conn.setAutoCommit(false);
             System.out.println ("Database connection established");
         }
         catch (Exception e)
@@ -64,12 +65,12 @@ public class DBAccess
 		return sqlStr;
 	}
 	
-	private static String replaceValues(final String template,
-		    final String prefix){
-
+	private static String replaceValues(final String template, final String prefix)
+	{
 		    final StringBuffer sb = new StringBuffer();
 		    final Matcher matcher = pattern.matcher(template);
-		    while(matcher.find()){
+		    while(matcher.find())
+		    {
 		        final String name = matcher.group(1);
 		        final String replacement = prefix+name;
 		        matcher.appendReplacement(sb, replacement);

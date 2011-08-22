@@ -3,11 +3,9 @@
  */
 package com.jdragon.system.auth;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import com.jdragon.system.BaseElement;
-import com.jdragon.system.JDSession;
+import com.jdragon.system.*;
 import com.jdragon.system.form.*;
 
 /**
@@ -40,7 +38,7 @@ public class AuthElement extends BaseElement
 			
 			Form loginForm=getForm("loginForm");
 
-			return RenderForm(loginForm);
+			return Render.form(loginForm);
 		}
 		else if("logout".equals(args.get(0)))
 		{

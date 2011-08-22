@@ -3,7 +3,6 @@
  */
 package com.jdragon.system;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -77,10 +76,6 @@ public abstract class BaseElement
 		return false;
 	}
 
-	protected final String RenderForm(Form form)
-	{
-		return Render.form(form, this);
-	}
 
 /** Form (Post request) processing methods ends*/
 	
@@ -107,18 +102,8 @@ public abstract class BaseElement
 	
 	public static final BaseElement getElementByName(String name) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
-		Class<?> c=null;
-		if(name.indexOf("com.jdragon.element")==0)
-		{
-			JDClassLoader loader = new JDClassLoader(JDClassLoader.class.getClassLoader());
-			loader.addURL(new File("E:/jdragon/WebContent/App/Default/Elements/").toURI().toURL());
-			c=loader.loadClass(name);
-		}
-		else
-		{
-			c = Class.forName(name);
-		}
-		
+		Class<?> c = Class.forName(name);
+	
 		BaseElement inst=(BaseElement)c.newInstance();
 
 		return inst;
