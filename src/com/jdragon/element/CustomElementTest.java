@@ -54,7 +54,7 @@ public class CustomElementTest extends BaseElement
 		{
 			Boolean isLoggedIn=Boolean.FALSE;
 			try {
-				BaseElement elem=BaseElement.getElementByName("com.jdragon.system.auth.AuthElement");
+				BaseElement elem=BaseElement.getElementByName("com.jdragon.system.element.JDAuth");
 				isLoggedIn=(Boolean)elem.api("isLoggedIn", null);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -89,6 +89,7 @@ public class CustomElementTest extends BaseElement
 		Form form=new Form(formName);
 		form.addComponent(new TextBox("num1").title("Number 1").value(""));
 		form.addComponent(new TextBox("num2").title("Number 2").value(""));
+		form.addComponent(new File("testfile").title("Upload a file"));
 		
 		form.addComponent(new Select("select1")
 							.option("+", "Add")

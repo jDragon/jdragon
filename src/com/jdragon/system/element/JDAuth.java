@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jdragon.system.auth;
+package com.jdragon.system.element;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ import com.jdragon.system.form.*;
  * @author raghukr
  *
  */
-public class AuthElement extends BaseElement
+public class JDAuth extends BaseElement
 {
 	boolean _isValid=false;
 	/* (non-Javadoc)

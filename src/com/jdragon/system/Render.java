@@ -26,5 +26,15 @@ public class Render
 
 		return formStr;		
 	}
+	
+	public static String link(String display, String url)
+	{
+		return "<a href=" + Q(url) + ">" + display + "</a>";
+	}
+	
+	public static String Q(String str)
+	{
+		return "\""+str+"\"";
+	}
 
 }

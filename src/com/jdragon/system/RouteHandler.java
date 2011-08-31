@@ -61,4 +61,17 @@ public class RouteHandler
 		
 		return matcher.matches();
 	}
+	
+	public static void reload()
+	{
+		_routeHash=new Hashtable<String, String>();
+		try
+		{
+			initRoutes();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

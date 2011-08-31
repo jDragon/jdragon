@@ -71,6 +71,11 @@ public class PageHandler
 		StaticContent.setError(errStr);
 	}
 	
+	public static void setMessage(String msgStr)
+	{
+// TODO : implement setMessage properly, do not use setError
+		StaticContent.setError(msgStr);
+	}
 }
 
 class StaticContent
