@@ -39,6 +39,8 @@ public class PageHandler
 		List<String> errList=StaticContent.getErrorList();
 		vars.put("errors", errList);
 
+		List<String> msgList=StaticContent.getMessageList();
+		vars.put("messages", msgList);
 		
 		Writer writer=new StringWriter();
 		tpl.process(vars, writer);
@@ -73,8 +75,7 @@ public class PageHandler
 	
 	public static void setMessage(String msgStr)
 	{
-// TODO : implement setMessage properly, do not use setError
-		StaticContent.setError(msgStr);
+		StaticContent.setMessage(msgStr);
 	}
 }
 
@@ -83,12 +84,14 @@ class StaticContent
 	private static ThreadLocal<List<String>> tlCssList= new ThreadLocal<List<String>>();
 	private static ThreadLocal<List<String>> tlJsList= new ThreadLocal<List<String>>();
 	private static ThreadLocal<List<String>> tlErrList= new ThreadLocal<List<String>>();
+	private static ThreadLocal<List<String>> tlMsgList= new ThreadLocal<List<String>>();
 	
 	static void init()
 	{
 		tlCssList.set(new ArrayList<String>());
 		tlJsList.set(new ArrayList<String>());
 		tlErrList.set(new ArrayList<String>());
+		tlMsgList.set(new ArrayList<String>());
 	}
 	
 	static void addJS(String jsStr)
@@ -117,11 +120,18 @@ class StaticContent
 	{
 		return tlErrList.get();
 	}
-		static void clear()
+
+	static List<String> getMessageList()
+	{
+		return tlErrList.get();
+	}
+
+	static void clear()
 	{
 		tlCssList.remove();
 		tlJsList.remove();
 		tlErrList.remove();
+		tlMsgList.remove();
 	}
 	
 	static void setError(String errStr)
@@ -129,4 +139,9 @@ class StaticContent
 		tlErrList.get().add(errStr);
 	}
 	
+	static void setMessage(String msgStr)
+	{
+		tlMsgList.get().add(msgStr);
+	}
+		
 }

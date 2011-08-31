@@ -72,7 +72,7 @@ public class CustomElementTest extends BaseElement
 			Chunk s=new Chunk();
 			s.setTitle(_t("Sample 2"));
 			s.setContent("Have a good day! <br />"
-					+ "Your role: " + JDSession.getUserRole()
+					+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
 					);
 			return s;
 		}
