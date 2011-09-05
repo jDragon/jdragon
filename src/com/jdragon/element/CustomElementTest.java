@@ -42,42 +42,70 @@ public class CustomElementTest extends BaseElement
 		return PageHandler.processTemplate(vars, "test.ftl");
 	}
 
-	public String[] seasoningsList()
+	public String[] chunksList()
 	{
 		String[] strList={"sample1", "sample2"};
 		return strList;
 	}
 
-	public Chunk chunk(String name)
+	public Chunk chunk_sample1()
 	{
-		if(name.equals("sample1"))
-		{
-			Boolean isLoggedIn=Boolean.FALSE;
-			try {
-				BaseElement elem=BaseElement.getElementByName("com.jdragon.system.element.JDAuth");
-				isLoggedIn=(Boolean)elem.api("isLoggedIn", null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			String lnk=isLoggedIn.equals(Boolean.FALSE)?"<a href='/jdragon/login'>Login</a>":"<a href='/jdragon/logout'>Logout</a>";
-			
-			Chunk s=new Chunk();
-			s.setTitle(_t("Sample 1"));
-			s.setContent("Hello, World! <br />" + lnk);
-			return s;
+		Boolean isLoggedIn=Boolean.FALSE;
+		try {
+			BaseElement elem=BaseElement.getElementByName("com.jdragon.system.element.JDAuth");
+			isLoggedIn=(Boolean)elem.api("isLoggedIn", null);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		if(name.equals("sample2"))
-		{
-			Chunk s=new Chunk();
-			s.setTitle(_t("Sample 2"));
-			s.setContent("Have a good day! <br />"
-					+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
-					);
-			return s;
-		}
-		return null;
+		
+		String lnk=isLoggedIn.equals(Boolean.FALSE)?"<a href='/jdragon/login'>Login</a>":"<a href='/jdragon/logout'>Logout</a>";
+		
+		Chunk s=new Chunk();
+		s.setTitle(_t("Sample 1"));
+		s.setContent("Hello, World! <br />" + lnk);
+		return s;
 	}
+	
+	public Chunk chunk_sample2()
+	{
+		Chunk s=new Chunk();
+		s.setTitle(_t("Sample 2"));
+		s.setContent("Have a good day! <br />"
+				+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
+				);
+		return s;
+	}	
+	
+//	public Chunk chunk(String name)
+//	{
+//		if(name.equals("sample1"))
+//		{
+//			Boolean isLoggedIn=Boolean.FALSE;
+//			try {
+//				BaseElement elem=BaseElement.getElementByName("com.jdragon.system.element.JDAuth");
+//				isLoggedIn=(Boolean)elem.api("isLoggedIn", null);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			
+//			String lnk=isLoggedIn.equals(Boolean.FALSE)?"<a href='/jdragon/login'>Login</a>":"<a href='/jdragon/logout'>Logout</a>";
+//			
+//			Chunk s=new Chunk();
+//			s.setTitle(_t("Sample 1"));
+//			s.setContent("Hello, World! <br />" + lnk);
+//			return s;
+//		}
+//		if(name.equals("sample2"))
+//		{
+//			Chunk s=new Chunk();
+//			s.setTitle(_t("Sample 2"));
+//			s.setContent("Have a good day! <br />"
+//					+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
+//					);
+//			return s;
+//		}
+//		return null;
+//	}
 
 	public String[] urlpatterns()
 	{

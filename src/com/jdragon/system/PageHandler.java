@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.jdragon.system.element.JDSettings;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -25,7 +27,7 @@ public class PageHandler
 	{
 		Configuration cfg = new Configuration();
 		cfg.setDirectoryForTemplateLoading(
-                new File("E:\\jdragon\\eclipseprj\\WebContent\\Templates"));
+                new File(JDSettings.get("CONTENT_DIR")+"/Templates"));
 		Template tpl=cfg.getTemplate(templateName);
 		
 		String cssStr="";
@@ -123,7 +125,7 @@ class StaticContent
 
 	static List<String> getMessageList()
 	{
-		return tlErrList.get();
+		return tlMsgList.get();
 	}
 
 	static void clear()

@@ -32,7 +32,7 @@ public abstract class BaseElement
 
 	public abstract String mainContent(List<String> args) throws Exception;
 	
-	public String[] seasoningsList()
+	public String[] chunksList()
 	{
 		String[] strList=new String[0];
 		return strList;
@@ -40,6 +40,29 @@ public abstract class BaseElement
 	
 	public Chunk chunk(String name)
 	{
+		Class<? extends BaseElement> cls=this.getClass();
+		Method m;
+		try
+		{
+			m = cls.getMethod("chunk_"+name, (Class<?>[])null);
+			return (Chunk) m.invoke(this, (Object[])null);
+		} catch (SecurityException e1)
+		{
+			e1.printStackTrace();
+		} catch (NoSuchMethodException e1)
+		{
+			PageHandler.setError("Chunk "+name+" not defined in "+this.getClass().getName());
+		}
+		catch (IllegalArgumentException e)
+		{
+			e.printStackTrace();
+		} catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		} catch (InvocationTargetException e)
+		{
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -97,7 +120,6 @@ public abstract class BaseElement
 		Class<? extends BaseElement> cls=this.getClass();
 		Method m=cls.getMethod(methodName, new Class[]{Object[].class});
 		return m.invoke(this, new Object[]{args});
-		
 	}
 	
 	public static final BaseElement getElementByName(String name) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException

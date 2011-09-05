@@ -23,7 +23,15 @@ public class JDSettings extends BaseElement
 {
 	private static Hashtable<String, String> _settingsHash=null;
 	
-	public static String getSetting(String name)
+	public static String get(String name, String defaultValue)
+	{
+		String val=get(name);
+		if(val==null)
+			val=defaultValue;
+		return val;
+	}
+
+	public static String get(String name)
 	{
 		if(_settingsHash==null)
 		{
@@ -55,10 +63,10 @@ public class JDSettings extends BaseElement
 		}
 	}
 	
-	public static void createSetting(String name, String value) throws SQLException
+	public static void set(String name, String value) throws SQLException
 	{
 		Connection conn=DBAccess.getConnection();
-		String existingVal=getSetting(name);
+		String existingVal=get(name);
 		Statement stmt = conn.createStatement();
 		String sql;
 		if(existingVal==null)
@@ -71,10 +79,10 @@ public class JDSettings extends BaseElement
 		reloadCache();
 	}
 	
-	public static void removeSetting(String name, String value) throws SQLException
+	public static void delete(String name, String value) throws SQLException
 	{
 		Connection conn=DBAccess.getConnection();
-		String existingVal=getSetting(name);
+		String existingVal=get(name);
 		Statement stmt = conn.createStatement();
 		String sql;
 		if(existingVal==null)
@@ -160,7 +168,7 @@ public class JDSettings extends BaseElement
 		String value = params.get("svalue")[0];
 		try
 		{
-			JDSettings.createSetting(name, value);
+			JDSettings.set(name, value);
 			return true;
 		} 
 		catch (SQLException e)
