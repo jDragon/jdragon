@@ -136,7 +136,7 @@ public class Index extends HttpServlet
 			if(errMap!=null)
 				vars.put("errors", errMap);
 
-			PageHandler.addCSS("/jdragon/Templates/zengarden-sample.css");
+			PageHandler.addCSS("/jdragon/Templates/default/style.css");
 			
 			String htmlOut=PageHandler.processTemplate(vars, "html.ftl");
 			out.println(htmlOut);

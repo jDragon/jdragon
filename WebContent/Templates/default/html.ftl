@@ -26,10 +26,17 @@
 		<div id="preamble">
 		</div>
 	</div>
+<div class="messages">
+	<#if messages?exists>
+		<#list messages as msg>
+		        ${msg} <br />
+		</#list>
+	</#if>
+</div>
 <div class="errors">
 	<#if errors?exists>
-		<#list errors?keys as errkeys>
-		        ${errkeys}:${errors[errkeys]} <br />
+		<#list errors as err>
+		        ${err} <br />
 		</#list>
 	</#if>
 </div>

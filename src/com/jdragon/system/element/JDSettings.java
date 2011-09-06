@@ -118,7 +118,7 @@ public class JDSettings extends BaseElement
 		if(args.size()>2 && "reload".equals(args.get(2)))
 		{
 			reloadCache();
-			PageHandler.setError("Cache Reloaded");
+			PageHandler.setMessage("Cache Reloaded");
 		}
 
 //		HashMap<String, Object> vars = new HashMap<String, Object>();
