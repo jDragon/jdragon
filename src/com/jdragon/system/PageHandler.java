@@ -27,7 +27,7 @@ public class PageHandler
 	{
 		Configuration cfg = new Configuration();
 		cfg.setDirectoryForTemplateLoading(
-                new File(JDSettings.get("CONTENT_DIR")+"/Templates"));
+                new File(JDSettings.get("CONTENT_DIR")+"/Templates/"+JDSettings.get("DefaultTemplate")));
 		Template tpl=cfg.getTemplate(templateName);
 		
 		String cssStr="";
