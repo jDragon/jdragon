@@ -80,7 +80,7 @@ CREATE TABLE `jd_settings` (
 
 /*!40000 ALTER TABLE `jd_settings` DISABLE KEYS */;
 LOCK TABLES `jd_settings` WRITE;
-INSERT INTO `jd_settings` VALUES ('tempdir','C:/temp'),('CONTENT_DIR','E:/jdragon/eclipseprj/WebContent');
+INSERT INTO `jd_settings` VALUES ('tempdir','C:/temp'),('CONTENT_DIR','E:/jdragon/WebContent'),('DefaultTemplate','default');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_settings` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
