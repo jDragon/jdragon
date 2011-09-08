@@ -83,6 +83,29 @@ LOCK TABLES `jd_settings` WRITE;
 INSERT INTO `jd_settings` VALUES ('tempdir','C:/temp'),('CONTENT_DIR','E:/jdragon/WebContent'),('DefaultTemplate','default');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_settings` ENABLE KEYS */;
+
+--
+-- Table structure for table `jd_users`
+--
+
+DROP TABLE IF EXISTS `jd_users`;
+CREATE TABLE `jd_users` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) NOT NULL,
+  `passwd` varchar(256) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `jd_users`
+--
+
+
+/*!40000 ALTER TABLE `jd_users` DISABLE KEYS */;
+LOCK TABLES `jd_users` WRITE;
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `jd_users` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
