@@ -11,25 +11,28 @@ public class Installer extends BaseElement
 	public String mainContent(List<String> args) throws Exception
 	{
 //		String op=args.get(0);
-		String ingrStr=args.get(1);
-		BaseElement ingr=BaseElement.getElementByName(ingrStr);
+		String elemStr=args.get(1);
+		BaseElement ingr=BaseElement.getElementByName(elemStr);
 		String[] urlpatterns=ingr.urlpatterns();
 
 		Connection conn=DBAccess.getConnection();
+		conn.setSavepoint();
 		Statement stmt = conn.createStatement();
-		String sql="delete from jd_routes where ingredient='"+ingrStr+"'";;
+		String sql="delete from jd_routes where ingredient='"+elemStr+"'";;
 		stmt.execute(sql);
 
 		
 		for(String urlpattern : urlpatterns)
 		{
 			stmt = conn.createStatement();
-			sql="insert into jd_routes (path, ingredient) values ('"+urlpattern+"', '"+ingrStr+"')";;
+			sql="insert into [routes] (path, ingredient) values ('"+urlpattern+"', '"+elemStr+"')";
+			sql=DBAccess.resolvePrefix(sql);
+			
 			stmt.execute(sql);
-			System.out.println("insert into jd_routes (path, ingredient) values ('"+urlpattern+"', '"+ingrStr+"')");
 		}
+		conn.commit();
 		
-		return "Installer Ingredient works!"+api("TestMethod", new Object[]{"From Caller!", "Second Arg"});
+		return "Installed Element: " + elemStr;
 	}
 
 	public String TestMethod(Object[] a)

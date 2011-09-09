@@ -34,7 +34,7 @@ CREATE TABLE `jd_routes` (
 
 /*!40000 ALTER TABLE `jd_routes` DISABLE KEYS */;
 LOCK TABLES `jd_routes` WRITE;
-INSERT INTO `jd_routes` VALUES (2,'/Install/%','com.jdragon.system.Installer'),(5,'/login','com.jdragon.system.element.JDAuth'),(6,'/Index/%/view','com.jdragon.element.CustomElementTest'),(7,'/Indextest','com.jdragon.element.CustomElementTest'),(8,'/logout','com.jdragon.system.element.JDAuth'),(9,'/admin/settings','com.jdragon.system.element.JDSettings'),(10,'/admin/settings/reload','com.jdragon.system.element.JDSettings');
+INSERT INTO `jd_routes` VALUES (2,'/Install/%','com.jdragon.system.Installer'),(6,'/Index/%/view','com.jdragon.element.CustomElementTest'),(7,'/Indextest','com.jdragon.element.CustomElementTest'),(9,'/admin/settings','com.jdragon.system.element.JDSettings'),(10,'/admin/settings/reload','com.jdragon.system.element.JDSettings'),(20,'/login','com.jdragon.system.element.JDAuth'),(21,'/logout','com.jdragon.system.element.JDAuth'),(22,'/register','com.jdragon.system.element.JDAuth');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_routes` ENABLE KEYS */;
 
@@ -93,6 +93,7 @@ CREATE TABLE `jd_users` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL,
   `passwd` varchar(256) NOT NULL,
+  `email` varchar(256) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -104,6 +105,7 @@ CREATE TABLE `jd_users` (
 
 /*!40000 ALTER TABLE `jd_users` DISABLE KEYS */;
 LOCK TABLES `jd_users` WRITE;
+INSERT INTO `jd_users` VALUES (1,'test1','5a105e8b9d40e1329780d62ea2265d8a','test1@example.com'),(2,'test2','ad0234829205b9033196ba818f7a872b','fdas@example.com'),(3,'test3','8ad8757baa8564dc136c1e07507f4a98','test3@example.com');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_users` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

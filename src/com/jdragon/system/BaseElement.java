@@ -86,17 +86,50 @@ public abstract class BaseElement
 /** Form (Post request) processing methods */
 	public Form getForm(String formName)
 	{
-		return null;
+		try 
+		{
+			String methodName= formName;
+			Class<? extends BaseElement> cls=this.getClass();
+			Method m=cls.getMethod(methodName, (Class<?>[])null);
+			return (Form)m.invoke(this, (Object[])null);
+		}
+		catch (Exception e) 
+		{
+			return null;
+		}
+		
 	}
 
 	public boolean validateForm(String formName, HashMap<String, String[]> params)
 	{
-		return true;
+		String methodName= formName + "_validate";
+		Class<? extends BaseElement> cls=this.getClass();
+		Method m;
+		try 
+		{
+			m = cls.getMethod(methodName, new Class[]{ HashMap.class});
+			return (Boolean) m.invoke(this, new Object[]{params});		
+		} 
+		catch (Exception e) 
+		{
+			return true;
+		}
 	}
 
 	public boolean submitForm(String formName, HashMap<String, String[]> params)
 	{
-		return false;
+		String methodName= formName + "_submit";
+		Class<? extends BaseElement> cls=this.getClass();
+		Method m;
+		try 
+		{
+			m = cls.getMethod(methodName, new Class[]{ HashMap.class});
+			return (Boolean) m.invoke(this, new Object[]{params});		
+		} 
+		catch (Exception e) 
+		{
+			return false;
+		}
 	}
 
 
