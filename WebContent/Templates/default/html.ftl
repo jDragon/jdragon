@@ -43,12 +43,12 @@
 		<h3><span>${title}</span></h3>
 		${content}
 	<div id="linkList">
+		<#if right?exists>
+		      ${right}
+		</#if>
 
 		<#if left?exists>
 		      ${left}
-		</#if>
-		<#if right?exists>
-		      ${right}
 		</#if>
 
 	</div>

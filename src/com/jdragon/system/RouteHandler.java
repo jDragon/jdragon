@@ -34,7 +34,7 @@ public class RouteHandler
 	{
 		Connection conn=DBAccess.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql=DBAccess.resolvePrefix("select * from [routes]");
+		String sql=DBAccess.SQL("select * from [routes]");
 		ResultSet rs=stmt.executeQuery(sql);
 		String ingr="", path="";
 		while (rs.next())

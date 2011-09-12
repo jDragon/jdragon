@@ -209,3 +209,8 @@ text-align: center;
 {
 	border:2px solid red;
 }
+
+table, th, tr, td
+{
+	border:1px solid black;
+}

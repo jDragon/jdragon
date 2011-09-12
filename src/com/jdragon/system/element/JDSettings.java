@@ -14,6 +14,7 @@ import com.jdragon.system.RouteHandler;
 import com.jdragon.system.form.Form;
 import com.jdragon.system.form.Submit;
 import com.jdragon.system.form.TextBox;
+import com.jdragon.util.XMLBuilder;
 
 /**
  * @author raghukr
@@ -52,7 +53,7 @@ public class JDSettings extends BaseElement
 	{
 		Connection conn=DBAccess.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql=DBAccess.resolvePrefix("select * from [settings]");
+		String sql=DBAccess.SQL("select * from [settings]");
 		ResultSet rs=stmt.executeQuery(sql);
 		String ingr="", path="";
 		while (rs.next())
@@ -70,10 +71,10 @@ public class JDSettings extends BaseElement
 		Statement stmt = conn.createStatement();
 		String sql;
 		if(existingVal==null)
-			sql="insert into [settings] (name, value) values ('"+name+"', '"+value+"')";
+			sql=DBAccess.SQL("insert into [settings] (name, value) values ('%s', '%s')", name, value);
 		else
-			sql="update [settings] set value='"+value+"' where name='"+name+"'";
-		sql=DBAccess.resolvePrefix(sql);
+			sql=DBAccess.SQL("update [settings] set value='%s' where name='%s'", value, name);
+
 		stmt.execute(sql);
 		conn.commit();
 		reloadCache();
@@ -86,12 +87,11 @@ public class JDSettings extends BaseElement
 		Statement stmt = conn.createStatement();
 		String sql;
 		if(existingVal==null)
-			sql="insert into [settings] (name, value) values ('"+name+"', '"+value+"')";
-		else
-			sql="update [settings] set value='"+value+"' where name='"+name+"'";
-		sql=DBAccess.resolvePrefix(sql);
-		stmt.execute(sql);
-		conn.commit();
+		{
+			sql=DBAccess.SQL("delete [settings] where name = '%s'", name);
+			stmt.execute(sql);
+			conn.commit();
+		}
 		reloadCache();
 	}
 	
@@ -120,11 +120,36 @@ public class JDSettings extends BaseElement
 			reloadCache();
 			PageHandler.setMessage("Cache Reloaded");
 		}
+		XMLBuilder builder=new XMLBuilder();
+		builder.tag("table")//.attr("style", "border: 1px solid #000;")
+			.tag("tr").tag("th").text("Name").end().tag("th").text("Value").end().end();
+		
+		String sql=DBAccess.SQL("select * from [settings]");
+		Connection conn=DBAccess.getConnection();
+		Statement stmt=conn.createStatement();
+		ResultSet rs=stmt.executeQuery(sql);
+		String name="", value="";
+		while (rs.next())
+		{
+			  builder.tag("tr");
+			  name = rs.getString("name");
+			  value = rs.getString("value");
+			  builder
+			  	.tag("td")
+			  		.text(name)
+			  	.end()
+			  	.tag("td")
+			  		.text(value)
+			  	.end();
+			  builder.end();//tr
+		}
+		builder.end();//table
+		
 
 //		HashMap<String, Object> vars = new HashMap<String, Object>();
 //		vars.put("form", RenderForm(getForm("JDSettingsForm")));
 		
-		return Render.form(getForm("JDSettingsForm"));
+		return Render.form(getForm("JDSettingsForm")) + "<br />" + builder.toString();
 	}
 
 

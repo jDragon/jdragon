@@ -90,8 +90,7 @@ public class JDAuth extends BaseElement
 		{
 			Connection conn=DBAccess.getConnection();
 			stmt = conn.createStatement();
-			String sql="select * from [users] where name='" + usr + "'" ;
-			sql=DBAccess.resolvePrefix(sql);
+			String sql= DBAccess.SQL("select * from [users] where username='%s'", usr) ;
 			ResultSet rs=stmt.executeQuery(sql);
 
 			if(rs.next() && rs.getString("passwd").equals(MD5(passwd)) && !rs.next())
@@ -134,8 +133,8 @@ public class JDAuth extends BaseElement
 		{
 			conn.setSavepoint();
 			Statement stmt = conn.createStatement();
-			String sql="insert into [users] (name, passwd, email) values ('" + usr + "', '" + passwd + "', '" + email +"')" ;
-			sql=DBAccess.resolvePrefix(sql);
+			String sql=DBAccess.SQL("insert into [users] (username, passwd, email) values ('%s', '%s', '%s')", 
+								usr, passwd, email);
 			stmt.execute(sql);
 
 			conn.commit();
@@ -161,8 +160,8 @@ public class JDAuth extends BaseElement
 		{
 			Connection conn=DBAccess.getConnection();
 			stmt = conn.createStatement();
-			String sql="select * from [users] where name='" + usr + "'" ;
-			sql=DBAccess.resolvePrefix(sql);
+			String sql="select * from [users] where username='" + usr + "'" ;
+			sql=DBAccess.SQL(sql);
 			ResultSet rs=stmt.executeQuery(sql);
 
 			if(rs.next())

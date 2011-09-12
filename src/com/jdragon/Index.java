@@ -185,7 +185,7 @@ public class Index extends HttpServlet
 		List<ChunkEntry> seList = new ArrayList<ChunkEntry>();
 		Connection conn=DBAccess.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql=DBAccess.resolvePrefix("select * from [chunks]");
+		String sql=DBAccess.SQL("select * from [chunks]");
 		ResultSet rs=stmt.executeQuery(sql);
 		while (rs.next())
 		{

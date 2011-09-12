@@ -59,12 +59,21 @@ public class DBAccess
 		return connect();
 	}
 
+	public static String SQL(String sql, Object... args)
+	{
+		String sqlStr=replaceValues(sql, "jd_");
+		if(args.length>0)
+			sqlStr=String.format(sqlStr, args);
+		
+		return sqlStr;
+	}
+/*
 	public static String resolvePrefix(String sql)
 	{
 		String sqlStr=replaceValues(sql, "jd_");
 		return sqlStr;
 	}
-	
+*/	
 	private static String replaceValues(final String template, final String prefix)
 	{
 		    final StringBuffer sb = new StringBuffer();
