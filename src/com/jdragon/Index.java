@@ -117,7 +117,7 @@ public class Index extends HttpServlet
 				String sPosition=se.getPosition();
 				String sName=se.getName();
 				String sIngrName=se.getChunk();
-				BaseElement sIngr=getIngredientByName(sIngrName, request);
+				BaseElement sIngr=getElementByName(sIngrName, request);
 				
 				Chunk s=sIngr.chunk(sName);
 				Map<String, Object> map=new HashMap<String, Object>();
@@ -170,10 +170,10 @@ public class Index extends HttpServlet
 	
 	private BaseElement getElement(String path, HttpServletRequest request) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
-		return getIngredientByName(RouteHandler.getIngredientName(path), request);
+		return getElementByName(RouteHandler.getElementName(path), request);
 	}
 
-	private BaseElement getIngredientByName(String name, HttpServletRequest request) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
+	private BaseElement getElementByName(String name, HttpServletRequest request) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
 	{
 		BaseElement inst=BaseElement.getElementByName(name);
 
@@ -185,13 +185,13 @@ public class Index extends HttpServlet
 		List<ChunkEntry> seList = new ArrayList<ChunkEntry>();
 		Connection conn=DBAccess.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql=DBAccess.resolvePrefix("select * from [seasonings]");
+		String sql=DBAccess.resolvePrefix("select * from [chunks]");
 		ResultSet rs=stmt.executeQuery(sql);
 		while (rs.next())
 		{
 			ChunkEntry se=new ChunkEntry();
 			se.setName(rs.getString("name"));
-			se.setChunk(rs.getString("ingredient"));
+			se.setChunk(rs.getString("element"));
 			se.setPosition(rs.getString("position"));
 			seList.add(se);
 		}

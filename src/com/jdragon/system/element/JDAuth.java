@@ -200,7 +200,8 @@ public class JDAuth extends BaseElement
 		return Boolean.FALSE;
 	}
 	
-	public String MD5(String str) {
+	public String MD5(String str) 
+	{
 		try 
 		{
 			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");

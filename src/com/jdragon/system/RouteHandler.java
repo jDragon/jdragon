@@ -15,7 +15,7 @@ public class RouteHandler
 {
 	private static Hashtable<String, String> _routeHash=null;
 	
-	public static String getIngredientName(String path) throws SQLException
+	public static String getElementName(String path) throws SQLException
 	{
 		if(_routeHash==null)
 		{
@@ -40,7 +40,7 @@ public class RouteHandler
 		while (rs.next())
 		{
 			  path = rs.getString("path");
-			  ingr = rs.getString("ingredient");
+			  ingr = rs.getString("element");
 			  _routeHash.put(path, ingr);
 		}
 	}

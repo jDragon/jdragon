@@ -21,7 +21,7 @@ public class CustomElementTest extends BaseElement
 	String _sum="";
 
 	/* (non-Javadoc)
-	 * @see com.jdragon.system.Ingredient#content()
+	 * @see com.jdragon.system.element#content()
 	 */
 	@Override
 	public String mainContent(List<String> args) throws Exception 
@@ -32,7 +32,7 @@ public class CustomElementTest extends BaseElement
 		{
 			vars.put("sum", _sum);
 		}
-		vars.put("welcome1", _t("Welcome to ingredient test"));
+		vars.put("welcome1", _t("Welcome to JDragon Element test"));
 		vars.put("welcome2", _t("Hello, How are you?"));
 		vars.put("args", args);
 		vars.put("form", Render.form(getForm("myForm")));
@@ -76,37 +76,6 @@ public class CustomElementTest extends BaseElement
 		return s;
 	}	
 	
-//	public Chunk chunk(String name)
-//	{
-//		if(name.equals("sample1"))
-//		{
-//			Boolean isLoggedIn=Boolean.FALSE;
-//			try {
-//				BaseElement elem=BaseElement.getElementByName("com.jdragon.system.element.JDAuth");
-//				isLoggedIn=(Boolean)elem.api("isLoggedIn", null);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			
-//			String lnk=isLoggedIn.equals(Boolean.FALSE)?"<a href='/jdragon/login'>Login</a>":"<a href='/jdragon/logout'>Logout</a>";
-//			
-//			Chunk s=new Chunk();
-//			s.setTitle(_t("Sample 1"));
-//			s.setContent("Hello, World! <br />" + lnk);
-//			return s;
-//		}
-//		if(name.equals("sample2"))
-//		{
-//			Chunk s=new Chunk();
-//			s.setTitle(_t("Sample 2"));
-//			s.setContent("Have a good day! <br />"
-//					+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
-//					);
-//			return s;
-//		}
-//		return null;
-//	}
-
 	public String[] urlpatterns()
 	{
 		return new String[]{"/Index/%/view", "/Indextest"};

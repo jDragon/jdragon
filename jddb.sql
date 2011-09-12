@@ -16,6 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `jd_chunks`
+--
+
+DROP TABLE IF EXISTS `jd_chunks`;
+CREATE TABLE `jd_chunks` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(128) NOT NULL,
+  `position` varchar(24) NOT NULL,
+  `element` varchar(256) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `jd_chunks`
+--
+
+
+/*!40000 ALTER TABLE `jd_chunks` DISABLE KEYS */;
+LOCK TABLES `jd_chunks` WRITE;
+INSERT INTO `jd_chunks` VALUES (1,'sample1','right','com.jdragon.element.CustomElementTest'),(2,'sample2','left','com.jdragon.element.CustomElementTest');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `jd_chunks` ENABLE KEYS */;
+
+--
 -- Table structure for table `jd_routes`
 --
 
@@ -23,7 +47,7 @@ DROP TABLE IF EXISTS `jd_routes`;
 CREATE TABLE `jd_routes` (
   `id` int(11) NOT NULL auto_increment,
   `path` varchar(256) NOT NULL,
-  `ingredient` varchar(64) NOT NULL,
+  `element` varchar(64) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -37,30 +61,6 @@ LOCK TABLES `jd_routes` WRITE;
 INSERT INTO `jd_routes` VALUES (2,'/Install/%','com.jdragon.system.Installer'),(6,'/Index/%/view','com.jdragon.element.CustomElementTest'),(7,'/Indextest','com.jdragon.element.CustomElementTest'),(9,'/admin/settings','com.jdragon.system.element.JDSettings'),(10,'/admin/settings/reload','com.jdragon.system.element.JDSettings'),(20,'/login','com.jdragon.system.element.JDAuth'),(21,'/logout','com.jdragon.system.element.JDAuth'),(22,'/register','com.jdragon.system.element.JDAuth');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_routes` ENABLE KEYS */;
-
---
--- Table structure for table `jd_seasonings`
---
-
-DROP TABLE IF EXISTS `jd_seasonings`;
-CREATE TABLE `jd_seasonings` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(128) NOT NULL,
-  `ingredient` varchar(256) NOT NULL,
-  `position` varchar(24) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `jd_seasonings`
---
-
-
-/*!40000 ALTER TABLE `jd_seasonings` DISABLE KEYS */;
-LOCK TABLES `jd_seasonings` WRITE;
-INSERT INTO `jd_seasonings` VALUES (1,'sample1','com.jdragon.element.CustomElementTest','right'),(2,'sample2','com.jdragon.element.CustomElementTest','left');
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `jd_seasonings` ENABLE KEYS */;
 
 --
 -- Table structure for table `jd_settings`
