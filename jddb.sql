@@ -58,7 +58,7 @@ CREATE TABLE `jd_routes` (
 
 /*!40000 ALTER TABLE `jd_routes` DISABLE KEYS */;
 LOCK TABLES `jd_routes` WRITE;
-INSERT INTO `jd_routes` VALUES (2,'/Install/%','com.jdragon.system.Installer'),(6,'/Index/%/view','com.jdragon.element.CustomElementTest'),(7,'/Indextest','com.jdragon.element.CustomElementTest'),(9,'/admin/settings','com.jdragon.system.element.JDSettings'),(10,'/admin/settings/reload','com.jdragon.system.element.JDSettings'),(20,'/login','com.jdragon.system.element.JDAuth'),(21,'/logout','com.jdragon.system.element.JDAuth'),(22,'/register','com.jdragon.system.element.JDAuth');
+INSERT INTO `jd_routes` VALUES (2,'/Install','com.jdragon.system.element.JDInstall'),(9,'/admin/settings','com.jdragon.system.element.JDSettings'),(10,'/admin/settings/reload','com.jdragon.system.element.JDSettings'),(20,'/login','com.jdragon.system.element.JDAuth'),(21,'/logout','com.jdragon.system.element.JDAuth'),(22,'/register','com.jdragon.system.element.JDAuth'),(27,'/Index/%/view','com.jdragon.element.CustomElementTest'),(28,'/Indextest','com.jdragon.element.CustomElementTest');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_routes` ENABLE KEYS */;
 
@@ -91,11 +91,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `jd_users`;
 CREATE TABLE `jd_users` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL,
   `passwd` varchar(256) NOT NULL,
   `email` varchar(256) NOT NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

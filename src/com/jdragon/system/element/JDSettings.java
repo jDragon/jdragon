@@ -158,9 +158,9 @@ public class JDSettings extends BaseElement
 		return new String[]{"/admin/settings", "/admin/settings/reload"};
 	}
 
-	public Form getForm(String formName)
+	public Form JDSettingsForm()
 	{
-		Form form=new Form(formName);
+		Form form=new Form("JDSettingsForm");
 		form.addComponent(new TextBox("sname").title("Name").value(""));
 		form.addComponent(new TextBox("svalue").title("Value").value(""));
 		
@@ -168,8 +168,7 @@ public class JDSettings extends BaseElement
 		return form;
 	}
 	
-	@Override
-	public boolean validateForm(String formName, HashMap<String, String[]> params)
+	public boolean JDSettingsForm_validate(HashMap<String, String[]> params)
 	{
 	    String val1 = params.get("sname")[0];
 	    String val2 = params.get("svalue")[0];
@@ -187,7 +186,7 @@ public class JDSettings extends BaseElement
 		return ret;
 	}
 
-	public boolean submitForm(String formName, HashMap<String, String[]> params)
+	public boolean JDSettingsForm_submit(HashMap<String, String[]> params)
 	{
 		String name = params.get("sname")[0];
 		String value = params.get("svalue")[0];
