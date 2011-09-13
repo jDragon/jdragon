@@ -6,6 +6,7 @@ package com.jdragon.element;
 import java.util.*;
 
 import com.jdragon.system.BaseElement;
+import com.jdragon.system.JDRequest;
 import com.jdragon.system.JDSession;
 import com.jdragon.system.PageHandler;
 import com.jdragon.system.Render;
@@ -23,9 +24,9 @@ public class CustomElementTest extends BaseElement
 	/* (non-Javadoc)
 	 * @see com.jdragon.system.element#content()
 	 */
-	@Override
-	public String mainContent(List<String> args) throws Exception 
+	public String mainContent() throws Exception 
 	{
+		List<String> args=JDRequest.args();
 		HashMap<String, Object> vars = new HashMap<String, Object>();
 
 		if(this.submitted())
@@ -76,9 +77,10 @@ public class CustomElementTest extends BaseElement
 		return s;
 	}	
 	
-	public String[] urlpatterns()
+	public void urlpatterns(Map<String, String> urlCallbackMap)	
 	{
-		return new String[]{"/Index/%/view", "/Indextest"};
+		urlCallbackMap.put("/Index/%/view", "mainContent");
+		urlCallbackMap.put("/Indextest", "mainContent");
 	}
 
 	public Form getForm(String formName)

@@ -2,7 +2,7 @@ package com.jdragon.system.element;
 
 import java.sql.*;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import com.jdragon.system.BaseElement;
 import com.jdragon.system.DBAccess;
@@ -14,8 +14,7 @@ import com.jdragon.system.form.TextBox;
 
 public class JDInstall extends BaseElement
 {
-	@Override
-	public String mainContent(List<String> args) throws Exception
+	public String mainContent() throws Exception
 	{
 		String str = Render.form(getForm("InstallerForm"));
 		return str;
@@ -26,7 +25,9 @@ public class JDInstall extends BaseElement
 		try
 		{
 			BaseElement ingr=BaseElement.getElementByName(element);
-			String[] urlpatterns=ingr.urlpatterns();
+			Map<String, String> urlCallbackMap=new HashMap<String, String>();
+
+			ingr.urlpatterns(urlCallbackMap);
 
 			Connection conn=DBAccess.getConnection();
 			conn.setSavepoint();
@@ -34,10 +35,10 @@ public class JDInstall extends BaseElement
 			String sql=DBAccess.SQL("delete from [routes] where element='%s'", element);
 			stmt.execute(sql);
 			
-			for(String urlpattern : urlpatterns)
+			for(Map.Entry<String, String> urlcb : urlCallbackMap.entrySet())
 			{
 				stmt = conn.createStatement();
-				sql=DBAccess.SQL("insert into [routes] (path, element) values ('%s', '%s')", urlpattern, element);
+				sql=DBAccess.SQL("insert into [routes] (path, element, callback) values ('%s', '%s', '%s')", urlcb.getKey(), element, urlcb.getValue());
 				
 				stmt.execute(sql);
 			}

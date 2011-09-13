@@ -47,6 +47,8 @@ public class JDSession
 		jdSessHolder.set(sessionObj);
 		
 		redirURLHolder.set("");
+		
+		JDRequest.init(request);
 	}
 	
 	public static void destroy()

@@ -13,13 +13,13 @@ import java.util.regex.*;
  */
 public class RouteHandler
 {
-	private static Hashtable<String, String> _routeHash=null;
+	private static Hashtable<String, String[]> _routeHash=null;
 	
-	public static String getElementName(String path) throws SQLException
+	public static String[] getElementAndCallback(String path) throws SQLException
 	{
 		if(_routeHash==null)
 		{
-			_routeHash=new Hashtable<String, String>();
+			_routeHash=new Hashtable<String, String[]>();
 			initRoutes();
 		}
 		for(String key : _routeHash.keySet())
@@ -27,7 +27,7 @@ public class RouteHandler
 			if(match(key, path))
 				return _routeHash.get(key);
 		}
-		return "";
+		return null;
 	}
 	
 	private static void initRoutes() throws SQLException
@@ -36,12 +36,13 @@ public class RouteHandler
 		Statement stmt = conn.createStatement();
 		String sql=DBAccess.SQL("select * from [routes]");
 		ResultSet rs=stmt.executeQuery(sql);
-		String ingr="", path="";
+		String elem="", path="", callback="";
 		while (rs.next())
 		{
 			  path = rs.getString("path");
-			  ingr = rs.getString("element");
-			  _routeHash.put(path, ingr);
+			  elem = rs.getString("element");
+			  callback = rs.getString("callback");
+			  _routeHash.put(path, new String[]{elem, callback});
 		}
 	}
 	
@@ -64,7 +65,7 @@ public class RouteHandler
 	
 	public static void reload()
 	{
-		_routeHash=new Hashtable<String, String>();
+		_routeHash=new Hashtable<String, String[]>();
 		try
 		{
 			initRoutes();
@@ -74,4 +75,6 @@ public class RouteHandler
 			e.printStackTrace();
 		}
 	}
+
 }
+

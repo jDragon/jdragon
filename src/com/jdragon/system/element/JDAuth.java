@@ -24,9 +24,9 @@ public class JDAuth extends BaseElement
 	/* (non-Javadoc)
 	 * @see com.jdragon.system.BaseElement#mainCourse(java.util.List)
 	 */
-	@Override
-	public String mainContent(List<String> args) throws Exception
+	public String mainContent() throws Exception
 	{
+		List<String> args= JDRequest.args();
 		if(args.size()<=0)
 			return "Invalid Arguments";
 		
@@ -187,9 +187,11 @@ public class JDAuth extends BaseElement
 	}
 
 	@Override
-	public String[] urlpatterns()
+	public void urlpatterns(Map<String, String> urlCallbackMap)
 	{
-		return new String[]{"/login", "/logout", "/register"};
+		urlCallbackMap.put("/login", "mainContent");
+		urlCallbackMap.put("/logout", "mainContent");
+		urlCallbackMap.put("/register", "mainContent");
 	}
 	
 	public Boolean isLoggedIn(Object[] o)

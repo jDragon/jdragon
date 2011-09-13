@@ -1,7 +1,7 @@
 package com.jdragon;
 
 import java.io.*;
-import java.net.MalformedURLException;
+import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
 
@@ -11,6 +11,7 @@ import javax.servlet.http.*;
 import com.jdragon.system.*;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.chunk.ChunkEntry;
+import com.jdragon.system.element.JDErrorHandler;
 import com.jdragon.system.form.Form;
 
 /**
@@ -49,31 +50,36 @@ public class Index extends HttpServlet
 //		HttpSession session = request.getSession();
 //		String sessionID = session.getId();
 		
-		PrintWriter out = response.getWriter();
-
 		String reqURI=request.getRequestURI();
 		reqURI=reqURI.substring(request.getContextPath().length());
-		ArrayList<String> list = new ArrayList<String>();
-		StringTokenizer tok = new StringTokenizer(reqURI);
-		while(tok.hasMoreTokens())
-			list.add(tok.nextToken("/"));
 
 		try 
 		{
-			BaseElement ingr = null;
+			BaseElement elem = null;
+			String callback="";
 			try
 			{
-				ingr = getElement(reqURI, request);
-			} catch (Exception e)
+				String[] ecArr=RouteHandler.getElementAndCallback(reqURI);
+				if(ecArr==null || ecArr.length<2)
+					throw new JDException("Error Occured retrieving element for: "+reqURI);
+				elem = BaseElement.getElementByName(ecArr[0]);
+				callback=ecArr[1];
+			} 
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
-			if(ingr==null)
-			{
-				ingr=new JDErrorHandler();
-			}
 			
-			if(method.equals("POST"))
+			/* If we are not able to get element, there is something wrong. In this case,
+			 * default to error handler element & do not process POST params & form
+			 */
+			
+			if(elem==null)
+			{
+				elem=new JDErrorHandler();
+				callback="mainContent";
+			}
+			else if(method.equals("POST"))
 			{
 				String[] formNames=request.getParameterValues("FORMNAME");
 				if(formNames.length!=1 || formNames[0]==null || formNames[0].equals(""))
@@ -92,15 +98,21 @@ public class Index extends HttpServlet
 					Form.setFormValues(params);
 				}
 				
-				ingr = getElement(reqURI, request);
-				if(ingr.validateForm(formName, params)==true)
-					ingr.submitForm(formName, params);
+				if(elem.validateForm(formName, params)==true)
+					elem.submitForm(formName, params);
 				
-				ingr.setSubmit(true);
+				elem.setSubmit(true);
 			}
 			
 			Map<String, Object> vars=new HashMap<String, Object>();
-			vars.put("content", ingr.mainContent(list));
+			
+			String content="";
+			Class<? extends BaseElement> cls=elem.getClass();
+			Method callbackMethod=cls.getMethod(callback, (Class<?>[])null);
+			content=(String)callbackMethod.invoke(elem, (Object[])null);
+			
+			
+			vars.put("content", content);
 			vars.put("title", "Main Content");
 			
 			String redirURL=JDSession.getRedirectURL();
@@ -116,10 +128,10 @@ public class Index extends HttpServlet
 				ChunkEntry se=seList.get(indx);
 				String sPosition=se.getPosition();
 				String sName=se.getName();
-				String sIngrName=se.getChunk();
-				BaseElement sIngr=getElementByName(sIngrName, request);
+				String selemName=se.getChunk();
+				BaseElement selem=BaseElement.getElementByName(selemName);
 				
-				Chunk s=sIngr.chunk(sName);
+				Chunk s=selem.chunk(sName);
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("title", s.getTitle());
 				map.put("data", s.getContent());
@@ -131,14 +143,16 @@ public class Index extends HttpServlet
 				vars.put(sPosition, contentStr);
 			}
 
-//Error Messages			
-			HashMap<String, String> errMap=(HashMap<String, String>)request.getAttribute("_jDr_ErrorMap");
+//Error Messages
+			HashMap<String, String> errMap=(HashMap<String, String>)request.getAttribute(JDCONST.ERRMAP);
 			if(errMap!=null)
 				vars.put("errors", errMap);
 
 			PageHandler.addCSS("/jdragon/Templates/default/style.css");
 			
 			String htmlOut=PageHandler.processTemplate(vars, "html.ftl");
+
+			PrintWriter out = response.getWriter();
 			out.println(htmlOut);
 		} 
 		catch (Exception e) 
@@ -166,18 +180,6 @@ public class Index extends HttpServlet
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		processRequests(request, response);
-	}
-	
-	private BaseElement getElement(String path, HttpServletRequest request) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
-	{
-		return getElementByName(RouteHandler.getElementName(path), request);
-	}
-
-	private BaseElement getElementByName(String name, HttpServletRequest request) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
-	{
-		BaseElement inst=BaseElement.getElementByName(name);
-
-		return inst;
 	}
 
 	private List<ChunkEntry> getChunks(String path) throws SQLException

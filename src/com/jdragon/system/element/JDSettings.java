@@ -8,6 +8,7 @@ import java.util.*;
 
 import com.jdragon.system.BaseElement;
 import com.jdragon.system.DBAccess;
+import com.jdragon.system.JDRequest;
 import com.jdragon.system.PageHandler;
 import com.jdragon.system.Render;
 import com.jdragon.system.RouteHandler;
@@ -109,12 +110,10 @@ public class JDSettings extends BaseElement
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.jdragon.system.Ingredient#content()
-	 */
-	@Override
-	public String mainContent(List<String> args) throws Exception 
+	public String settings() throws Exception 
 	{
+		List<String> args=JDRequest.args();
+
 		if(args.size()>2 && "reload".equals(args.get(2)))
 		{
 			reloadCache();
@@ -152,10 +151,10 @@ public class JDSettings extends BaseElement
 		return Render.form(getForm("JDSettingsForm")) + "<br />" + builder.toString();
 	}
 
-
-	public String[] urlpatterns()
+	public void urlpatterns(Map<String, String> urlCallbackMap)	
 	{
-		return new String[]{"/admin/settings", "/admin/settings/reload"};
+		urlCallbackMap.put("/admin/settings", "settings");
+		urlCallbackMap.put("/admin/settings/reload", "settings");
 	}
 
 	public Form JDSettingsForm()

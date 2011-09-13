@@ -7,9 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-
+import java.util.*;
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.Form;
 
@@ -30,8 +28,6 @@ public abstract class BaseElement
 		_isPost = post;
 	}
 
-	public abstract String mainContent(List<String> args) throws Exception;
-	
 	public String[] chunksList()
 	{
 		String[] strList=new String[0];
@@ -66,9 +62,8 @@ public abstract class BaseElement
 		return null;
 	}
 
-	public String[] urlpatterns()
+	public void urlpatterns(Map<String, String> urlCallbackMap)
 	{
-		return new String[]{};
 	}
 	
 	public String[] accessCodes()
@@ -148,11 +143,19 @@ public abstract class BaseElement
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public final Object api(String methodName, Object[] args) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
+	public final Object api(String methodName, Object[] args) throws JDException
 	{
-		Class<? extends BaseElement> cls=this.getClass();
-		Method m=cls.getMethod(methodName, new Class[]{Object[].class});
-		return m.invoke(this, new Object[]{args});
+		try
+		{
+			Class<? extends BaseElement> cls=this.getClass();
+			Method m=cls.getMethod(methodName, new Class[]{Object[].class});
+			return m.invoke(this, new Object[]{args});
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new JDException(e);
+		}
 	}
 	
 	public static final BaseElement getElementByName(String name) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, MalformedURLException
