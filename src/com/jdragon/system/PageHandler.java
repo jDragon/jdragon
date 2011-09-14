@@ -30,6 +30,8 @@ public class PageHandler
                 new File(JDSettings.get("CONTENT_DIR")+"/Templates/"+JDSettings.get("DefaultTemplate")));
 		Template tpl=cfg.getTemplate(templateName);
 		
+		addCSS("/jdragon/Templates/"+JDSettings.get("DefaultTemplate")+"/style.css");
+		
 		String cssStr="";
 		List<String> cssList=StaticContent.getCSSList();
 		for(int i=0; i<cssList.size(); i++)
@@ -48,6 +50,12 @@ public class PageHandler
 		tpl.process(vars, writer);
 
 		return writer.toString();
+	}
+	
+// TODO use this fn for full page processing
+	public static String processFullPage(Map<String, Object> vars, String templateName) throws IOException, TemplateException
+	{
+		return "";
 	}
 	
 	public static void init()

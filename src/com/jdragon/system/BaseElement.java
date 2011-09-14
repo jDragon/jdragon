@@ -3,11 +3,14 @@
  */
 package com.jdragon.system;
 
+import static com.jdragon.system.JDMessage.getJDMessage;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.*;
+
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.Form;
 
@@ -47,7 +50,7 @@ public abstract class BaseElement
 			e1.printStackTrace();
 		} catch (NoSuchMethodException e1)
 		{
-			PageHandler.setError("Chunk "+name+" not defined in "+this.getClass().getName());
+			PageHandler.setError(getJDMessage("ChunkNotDefined", name, this.getClass().getName()));
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -81,18 +84,22 @@ public abstract class BaseElement
 /** Form (Post request) processing methods */
 	public Form getForm(String formName)
 	{
+		Form form=new Form(formName);
 		try 
 		{
 			String methodName= formName;
 			Class<? extends BaseElement> cls=this.getClass();
-			Method m=cls.getMethod(methodName, (Class<?>[])null);
-			return (Form)m.invoke(this, (Object[])null);
+			Method method=cls.getMethod(methodName, new Class<?>[]{Form.class});
+			method.invoke(this, new Object[]{form});
 		}
 		catch (Exception e) 
 		{
-			return null;
+			e.printStackTrace();
+			//String err=ResourceBundle.getBundle("JDMessages").getString("GetFormErr");
+			//PageHandler.setError(err);
+			PageHandler.setError(getJDMessage("GetFormErr", formName));
 		}
-		
+		return form;
 	}
 
 	public boolean validateForm(String formName, HashMap<String, String[]> params)
@@ -137,12 +144,9 @@ public abstract class BaseElement
 	 * @param methodName
 	 * @param args
 	 * @return
-	 * @throws SecurityException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
+	 * @throws JDException
 	 */
+
 	public final Object api(String methodName, Object[] args) throws JDException
 	{
 		try

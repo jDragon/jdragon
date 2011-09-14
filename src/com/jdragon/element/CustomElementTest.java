@@ -38,7 +38,8 @@ public class CustomElementTest extends BaseElement
 		vars.put("args", args);
 		vars.put("form", Render.form(getForm("myForm")));
 
-		PageHandler.setError("Test Error Message");
+		String err=ResourceBundle.getBundle("JDMessages").getString("TestErr");
+		PageHandler.setError(err);//("Test Error Message");
 
 		return PageHandler.processTemplate(vars, "test.ftl");
 	}
@@ -83,9 +84,8 @@ public class CustomElementTest extends BaseElement
 		urlCallbackMap.put("/Indextest", "mainContent");
 	}
 
-	public Form getForm(String formName)
+	public void myForm(Form form)
 	{
-		Form form=new Form(formName);
 		form.addComponent(new TextBox("num1").title("Number 1").value(""));
 		form.addComponent(new TextBox("num2").title("Number 2").value(""));
 		form.addComponent(new File("testfile").title("Upload a file"));
@@ -97,7 +97,6 @@ public class CustomElementTest extends BaseElement
 		);
 		
 		form.addComponent(new Submit("submitbtn").title("Go!"));
-		return form;
 	}
 	
 	@Override

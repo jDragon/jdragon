@@ -36,7 +36,6 @@ public class Index extends HttpServlet
 		super.init(config);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void processRequests(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
@@ -89,10 +88,10 @@ public class Index extends HttpServlet
 				String formName=formNames[0];
 				
 				HashMap<String, String[]> params=new HashMap<String, String[]>();
-				Enumeration<String> paramNames = request.getParameterNames();
+				Enumeration<?> paramNames = request.getParameterNames();
 				while(paramNames.hasMoreElements()) 
 				{
-					String paramName = paramNames.nextElement();
+					String paramName = (String)paramNames.nextElement();
 					String[] paramValues = request.getParameterValues(paramName);
 					params.put(paramName, paramValues);
 					Form.setFormValues(params);
@@ -143,13 +142,6 @@ public class Index extends HttpServlet
 				vars.put(sPosition, contentStr);
 			}
 
-//Error Messages
-			HashMap<String, String> errMap=(HashMap<String, String>)request.getAttribute(JDCONST.ERRMAP);
-			if(errMap!=null)
-				vars.put("errors", errMap);
-
-			PageHandler.addCSS("/jdragon/Templates/default/style.css");
-			
 			String htmlOut=PageHandler.processTemplate(vars, "html.ftl");
 
 			PrintWriter out = response.getWriter();

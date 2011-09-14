@@ -52,13 +52,10 @@ public class JDInstall extends BaseElement
 		} 
 	}
 	
-	public Form InstallerForm()
+	public void InstallerForm(Form form)
 	{
-		Form form=new Form("InstallerForm");
 		form.addComponent(new TextBox("element").title("Element").value(""));
-		
 		form.addComponent(new Submit("submitbtn").title("Install"));
-		return form;
 	}
 	
 	public boolean InstallerForm_validate(HashMap<String, String[]> params)

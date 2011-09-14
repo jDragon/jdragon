@@ -21,57 +21,29 @@ import com.jdragon.system.form.*;
 public class JDAuth extends BaseElement
 {
 	boolean _isValid=false;
-	/* (non-Javadoc)
-	 * @see com.jdragon.system.BaseElement#mainCourse(java.util.List)
-	 */
-	public String mainContent() throws Exception
+
+	public String login() throws Exception
 	{
-		List<String> args= JDRequest.args();
-		if(args.size()<=0)
-			return "Invalid Arguments";
+		boolean isLoggedIn=isLoggedIn(null);
 		
-		if("login".equals(args.get(0)))
+		if(this.submitted() && _isValid)
 		{
-			boolean isLoggedIn=isLoggedIn(null);
-			
-			if(this.submitted() && _isValid)
-			{
-				return "Login Successful";
-			}
+			return "Login Successful";
+		}
 
-			if(isLoggedIn)
-				return "Already Logged in";
-			
-			Form loginForm=getForm("loginForm");
-
-			return Render.form(loginForm);
-		}
-		else if("logout".equals(args.get(0)))
-		{
-			JDSession.destroy();
-			JDSession.requestRedirect("/jdragon/login");
-			return "";//"Successfully Logged out";
-		}
-		else if("register".equals(args.get(0)))
-		{
-			if(this.submitted() && _isValid)
-			{
-				return "Registration Successful";
-			}
-			return Render.form(getForm("registrationForm"));
-		}
+		if(isLoggedIn)
+			return "Already Logged in";
 		
-		return "Something wrong here";
+		Form loginForm=getForm("loginForm");
 
+		return Render.form(loginForm);		
 	}
 
-	public Form loginForm()
+	public void loginForm(Form frm)
 	{
-		Form frm=new Form("loginForm");
 		frm.addComponent(new TextBox("username").title("User Name"));
 		frm.addComponent(new Password("passwd").title("Password"));
 		frm.addComponent(new Submit("Submit").title("Go!"));
-		return frm;
 	}
 
 	public boolean loginForm_submit(HashMap<String, String[]> params)
@@ -97,27 +69,41 @@ public class JDAuth extends BaseElement
 				_isValid = true;
 			else
 			{
-				PageHandler.setError("Invalid Credentials");
+				PageHandler.setError(JDMessage.getJDMessage("InvalidCredential"));
 				_isValid = false;
 			}
 		} 
 		catch (Exception e) 
 		{
-			PageHandler.setError("Error Occured");
+			PageHandler.setError(JDMessage.getJDMessage("UnknownError"));
 			e.printStackTrace();
 		}
 
 		return _isValid;
 	}
-	
-	public Form registrationForm()
+
+	public String logout() throws Exception
 	{
-		Form frm=new Form("registrationForm");
+		JDSession.destroy();
+		JDSession.requestRedirect("/jdragon/login");
+		return "";//"Successfully Logged out";	
+	}
+	
+	public String register() throws Exception
+	{
+		if(this.submitted() && _isValid)
+		{
+			return "Registration Successful";
+		}
+		return Render.form(getForm("registrationForm"));		
+	}
+	
+	public void registrationForm(Form frm)
+	{
 		frm.addComponent(new TextBox("username").title("User Name"));
 		frm.addComponent(new Password("passwd").title("Password"));
 		frm.addComponent(new TextBox("email").title("E-Mail"));
 		frm.addComponent(new Submit("Submit").title("Register"));
-		return frm;
 	}
 
 	public boolean registrationForm_submit(HashMap<String, String[]> params)
@@ -160,19 +146,18 @@ public class JDAuth extends BaseElement
 		{
 			Connection conn=DBAccess.getConnection();
 			stmt = conn.createStatement();
-			String sql="select * from [users] where username='" + usr + "'" ;
-			sql=DBAccess.SQL(sql);
+			String sql=DBAccess.SQL("select * from [users] where username='%s'", usr);
 			ResultSet rs=stmt.executeQuery(sql);
 
 			if(rs.next())
 			{
-				Form.setError("username", "User already exists. Choose a different name");
+				Form.setError("username", JDMessage.getJDMessage("UserExists"));
 				_isValid=false;
 			}
 			
 			if(!isValidEmailAddress(email))
 			{
-				Form.setError("email", "Invalid E-Mail address");
+				Form.setError("email", JDMessage.getJDMessage("InvalidEmail"));
 				_isValid=false;
 			}
 		} 
@@ -189,9 +174,9 @@ public class JDAuth extends BaseElement
 	@Override
 	public void urlpatterns(Map<String, String> urlCallbackMap)
 	{
-		urlCallbackMap.put("/login", "mainContent");
-		urlCallbackMap.put("/logout", "mainContent");
-		urlCallbackMap.put("/register", "mainContent");
+		urlCallbackMap.put("/login", "login");
+		urlCallbackMap.put("/logout", "logout");
+		urlCallbackMap.put("/register", "register");
 	}
 	
 	public Boolean isLoggedIn(Object[] o)

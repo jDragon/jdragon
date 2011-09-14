@@ -105,7 +105,6 @@ public class JDSettings extends BaseElement
 			RouteHandler.reload();
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -144,10 +143,6 @@ public class JDSettings extends BaseElement
 		}
 		builder.end();//table
 		
-
-//		HashMap<String, Object> vars = new HashMap<String, Object>();
-//		vars.put("form", RenderForm(getForm("JDSettingsForm")));
-		
 		return Render.form(getForm("JDSettingsForm")) + "<br />" + builder.toString();
 	}
 
@@ -157,14 +152,12 @@ public class JDSettings extends BaseElement
 		urlCallbackMap.put("/admin/settings/reload", "settings");
 	}
 
-	public Form JDSettingsForm()
+	public void JDSettingsForm(Form form)
 	{
-		Form form=new Form("JDSettingsForm");
 		form.addComponent(new TextBox("sname").title("Name").value(""));
 		form.addComponent(new TextBox("svalue").title("Value").value(""));
 		
 		form.addComponent(new Submit("submitbtn").title("Add!"));
-		return form;
 	}
 	
 	public boolean JDSettingsForm_validate(HashMap<String, String[]> params)
