@@ -48,6 +48,7 @@ CREATE TABLE `jd_routes` (
   `id` int(11) NOT NULL auto_increment,
   `path` varchar(256) NOT NULL,
   `element` varchar(64) NOT NULL,
+  `callback` varchar(256) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -58,7 +59,7 @@ CREATE TABLE `jd_routes` (
 
 /*!40000 ALTER TABLE `jd_routes` DISABLE KEYS */;
 LOCK TABLES `jd_routes` WRITE;
-INSERT INTO `jd_routes` VALUES (2,'/Install','com.jdragon.system.element.JDInstall'),(9,'/admin/settings','com.jdragon.system.element.JDSettings'),(10,'/admin/settings/reload','com.jdragon.system.element.JDSettings'),(20,'/login','com.jdragon.system.element.JDAuth'),(21,'/logout','com.jdragon.system.element.JDAuth'),(22,'/register','com.jdragon.system.element.JDAuth'),(27,'/Index/%/view','com.jdragon.element.CustomElementTest'),(28,'/Indextest','com.jdragon.element.CustomElementTest');
+INSERT INTO `jd_routes` VALUES (2,'/Install','com.jdragon.system.element.JDInstall','mainContent'),(27,'/Index/%/view','com.jdragon.element.CustomElementTest','mainContent'),(28,'/Indextest','com.jdragon.element.CustomElementTest','mainContent'),(29,'/admin/settings/reload','com.jdragon.system.element.JDSettings','settings'),(30,'/admin/settings','com.jdragon.system.element.JDSettings','settings'),(34,'/register','com.jdragon.system.element.JDAuth','register'),(35,'/login','com.jdragon.system.element.JDAuth','login'),(36,'/logout','com.jdragon.system.element.JDAuth','logout');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_routes` ENABLE KEYS */;
 
