@@ -22,6 +22,32 @@ public class JDAuth extends BaseElement
 {
 	boolean _isValid=false;
 
+	public boolean authenticate(String username, String passwd)
+	{
+		_isValid=false;
+		Statement stmt;
+		try 
+		{
+			Connection conn=DBAccess.getConnection();
+			stmt = conn.createStatement();
+			String sql= DBAccess.SQL("select * from [users] where username='%s'", username) ;
+			ResultSet rs=stmt.executeQuery(sql);
+
+			if(rs.next() && rs.getString("passwd").equals(MD5(passwd)) && !rs.next())
+				_isValid = true;
+			else
+			{
+				PageHandler.setError(JDMessage.getJDMessage("InvalidCredential"));
+			}
+		} 
+		catch (Exception e) 
+		{
+			PageHandler.setError(JDMessage.getJDMessage("UnknownError"));
+			e.printStackTrace();
+		}
+		return _isValid;
+	}	
+	
 	public String login() throws Exception
 	{
 		boolean isLoggedIn=isLoggedIn(null);
@@ -57,29 +83,7 @@ public class JDAuth extends BaseElement
 		String usr=((String[])params.get("username"))[0];
 		String passwd=((String[])params.get("passwd"))[0];
 
-		Statement stmt;
-		try 
-		{
-			Connection conn=DBAccess.getConnection();
-			stmt = conn.createStatement();
-			String sql= DBAccess.SQL("select * from [users] where username='%s'", usr) ;
-			ResultSet rs=stmt.executeQuery(sql);
-
-			if(rs.next() && rs.getString("passwd").equals(MD5(passwd)) && !rs.next())
-				_isValid = true;
-			else
-			{
-				PageHandler.setError(JDMessage.getJDMessage("InvalidCredential"));
-				_isValid = false;
-			}
-		} 
-		catch (Exception e) 
-		{
-			PageHandler.setError(JDMessage.getJDMessage("UnknownError"));
-			e.printStackTrace();
-		}
-
-		return _isValid;
+		return authenticate(usr, passwd);
 	}
 
 	public String logout() throws Exception

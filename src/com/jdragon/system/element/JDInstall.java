@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.jdragon.system.BaseElement;
 import com.jdragon.system.DBAccess;
+import com.jdragon.system.JDMessage;
 import com.jdragon.system.PageHandler;
 import com.jdragon.system.Render;
 import com.jdragon.system.form.Form;
@@ -64,7 +65,7 @@ public class JDInstall extends BaseElement
 	    boolean ret=true;
 		if(elem==null)
 		{
-		    Form.setError("element", "Name cannot be blank");
+		    Form.setError("element", JDMessage.getJDMessage("InstallElementBlank"));
 			ret=false;
 		}
 		return ret;
@@ -75,9 +76,9 @@ public class JDInstall extends BaseElement
 	    String elem = params.get("element")[0];
 	    boolean ret = install(elem);
 		if(ret)
-			PageHandler.setMessage( "Installed Element: " + elem );
+			PageHandler.setMessage(JDMessage.getJDMessage("InstallElementSuccess", elem));
 		else
-			Form.setError("element", "Element Installation failed");
+			Form.setError("element", JDMessage.getJDMessage("InstallElementError", elem));
 	    return ret;
 	}		
 }
