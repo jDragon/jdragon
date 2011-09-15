@@ -74,7 +74,8 @@ public class JDAuth extends BaseElement
 
 	public boolean loginForm_submit(HashMap<String, String[]> params)
 	{
-		JDSession.setCredentials(params.get("username")[0], "1", "authenticated");
+		String usr=((String[])params.get("username"))[0];
+		JDSession.setUser(JDUser.getUser(usr));
 		return false;
 	}
 
@@ -97,7 +98,8 @@ public class JDAuth extends BaseElement
 	{
 		if(this.submitted() && _isValid)
 		{
-			return "Registration Successful";
+			PageHandler.setMessage(JDMessage.getJDMessage("RegistrationSuccess"));
+			return "";
 		}
 		return Render.form(getForm("registrationForm"));		
 	}
@@ -167,7 +169,7 @@ public class JDAuth extends BaseElement
 		} 
 		catch (Exception e) 
 		{
-			PageHandler.setError("Error Occured");
+			PageHandler.setError(JDMessage.getJDMessage("UnknownError"));
 			e.printStackTrace();
 			_isValid=false;
 		}
@@ -183,11 +185,9 @@ public class JDAuth extends BaseElement
 		urlCallbackMap.put("/register", "register");
 	}
 	
-	public Boolean isLoggedIn(Object[] o)
+	public boolean isLoggedIn(Object[] o)
 	{
-		if(JDSession.getUser()!=null)
-			return Boolean.TRUE;
-		return Boolean.FALSE;
+		return JDSession.getUser()!=JDUser.getGuestUser(); 
 	}
 	
 	public String MD5(String str) 

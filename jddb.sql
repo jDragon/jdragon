@@ -95,6 +95,8 @@ CREATE TABLE `jd_users` (
   `username` varchar(50) NOT NULL,
   `passwd` varchar(256) NOT NULL,
   `email` varchar(256) NOT NULL,
+  `firstname` varchar(256) default NULL,
+  `lastname` varchar(256) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -106,7 +108,7 @@ CREATE TABLE `jd_users` (
 
 /*!40000 ALTER TABLE `jd_users` DISABLE KEYS */;
 LOCK TABLES `jd_users` WRITE;
-INSERT INTO `jd_users` VALUES (1,'test1','5a105e8b9d40e1329780d62ea2265d8a','test1@example.com'),(2,'test2','ad0234829205b9033196ba818f7a872b','fdas@example.com'),(3,'test3','8ad8757baa8564dc136c1e07507f4a98','test3@example.com');
+INSERT INTO `jd_users` VALUES (1,'test1','5a105e8b9d40e1329780d62ea2265d8a','test1@example.com',NULL,NULL),(2,'test2','ad0234829205b9033196ba818f7a872b','fdas@example.com',NULL,NULL),(3,'test3','8ad8757baa8564dc136c1e07507f4a98','test3@example.com',NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_users` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

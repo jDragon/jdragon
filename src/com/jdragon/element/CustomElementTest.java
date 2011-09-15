@@ -33,8 +33,8 @@ public class CustomElementTest extends BaseElement
 		{
 			vars.put("sum", _sum);
 		}
-		vars.put("welcome1", _t("Welcome to JDragon Element test"));
-		vars.put("welcome2", _t("Hello, How are you?"));
+		vars.put("welcome1", "Welcome to JDragon Element test");
+		vars.put("welcome2", "Hello, How are you?");
 		vars.put("args", args);
 		vars.put("form", Render.form(getForm("myForm")));
 
@@ -63,7 +63,7 @@ public class CustomElementTest extends BaseElement
 		String lnk=isLoggedIn.equals(Boolean.FALSE)?"<a href='/jdragon/login'>Login</a>":"<a href='/jdragon/logout'>Logout</a>";
 		
 		Chunk s=new Chunk();
-		s.setTitle(_t("Sample 1"));
+		s.setTitle("Sample 1");
 		s.setContent("Hello, World! <br />" + lnk);
 		return s;
 	}
@@ -71,9 +71,10 @@ public class CustomElementTest extends BaseElement
 	public Chunk chunk_sample2()
 	{
 		Chunk s=new Chunk();
-		s.setTitle(_t("Sample 2"));
+		s.setTitle("Sample 2");
 		s.setContent("Have a good day! <br />"
-				+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
+				//+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
+				+ "Welcome "+JDSession.getUser().getUsername()
 				);
 		return s;
 	}	

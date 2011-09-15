@@ -12,7 +12,8 @@ public class JDMessage
 		{
 			ResourceBundle rb=ResourceBundle.getBundle(resource);
 			msg=rb.getString(key);
-			msg=MessageFormat.format(msg, args);
+			if(args.length>0)
+				msg=MessageFormat.format(msg, args);
 		} catch (Exception e)
 		{
 			msg="Error while accessing resource: " + resource + "  Key: " + key;

@@ -13,6 +13,7 @@ import java.util.*;
 
 import com.jdragon.system.chunk.Chunk;
 import com.jdragon.system.form.Form;
+import com.jdragon.system.schema.Schema;
 
 /**
  * @author raghukr
@@ -74,13 +75,6 @@ public abstract class BaseElement
 		return new String[]{};
 	}
 
-/** Ingredient definition Methods ends*/
-	
-	protected final String _t(String originalStr)
-	{
-		return originalStr;
-	}
-	
 /** Form (Post request) processing methods */
 	public Form getForm(String formName)
 	{
@@ -138,7 +132,7 @@ public abstract class BaseElement
 /** Form (Post request) processing methods ends*/
 	
 	/**
-	 * Allows calling methods in other ingredients by using BaseIngredient handler. 
+	 * Allows calling methods in other elements by using BaseElement handler. 
 	 * The methods that can be called should take Object[] as input and return Object as output
 	 *  
 	 * @param methodName
@@ -169,5 +163,10 @@ public abstract class BaseElement
 		BaseElement inst=(BaseElement)c.newInstance();
 
 		return inst;
+	}
+	
+	public Schema schema()
+	{
+		return null;
 	}
 }

@@ -56,12 +56,12 @@ public class JDSettings extends BaseElement
 		Statement stmt = conn.createStatement();
 		String sql=DBAccess.SQL("select * from [settings]");
 		ResultSet rs=stmt.executeQuery(sql);
-		String ingr="", path="";
+		String elem="", path="";
 		while (rs.next())
 		{
 			  path = rs.getString("name");
-			  ingr = rs.getString("value");
-			  _settingsHash.put(path, ingr);
+			  elem = rs.getString("value");
+			  _settingsHash.put(path, elem);
 		}
 	}
 	

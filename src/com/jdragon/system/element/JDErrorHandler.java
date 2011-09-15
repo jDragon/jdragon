@@ -20,6 +20,6 @@ public class JDErrorHandler extends BaseElement
 	{
 		if(_error==null)
 			_error="Error Occured";
-		return _t(_error);
+		return _error;
 	}
 }

@@ -12,6 +12,7 @@ import com.jdragon.system.Render;
 import com.jdragon.system.form.Form;
 import com.jdragon.system.form.Submit;
 import com.jdragon.system.form.TextBox;
+import com.jdragon.system.schema.Schema;
 
 public class JDInstall extends BaseElement
 {
@@ -25,12 +26,16 @@ public class JDInstall extends BaseElement
 	{
 		try
 		{
-			BaseElement ingr=BaseElement.getElementByName(element);
+			BaseElement elem=BaseElement.getElementByName(element);
 			Map<String, String> urlCallbackMap=new HashMap<String, String>();
 
-			ingr.urlpatterns(urlCallbackMap);
+			elem.urlpatterns(urlCallbackMap);
 
 			Connection conn=DBAccess.getConnection();
+
+			Schema schema=elem.schema();
+			installSchema(schema);
+			
 			conn.setSavepoint();
 			Statement stmt = conn.createStatement();
 			String sql=DBAccess.SQL("delete from [routes] where element='%s'", element);
@@ -43,6 +48,7 @@ public class JDInstall extends BaseElement
 				
 				stmt.execute(sql);
 			}
+			
 			conn.commit();
 			return Boolean.TRUE;
 		} 
@@ -52,7 +58,7 @@ public class JDInstall extends BaseElement
 			return Boolean.FALSE;
 		} 
 	}
-	
+
 	public void InstallerForm(Form form)
 	{
 		form.addComponent(new TextBox("element").title("Element").value(""));
@@ -80,5 +86,12 @@ public class JDInstall extends BaseElement
 		else
 			Form.setError("element", JDMessage.getJDMessage("InstallElementError", elem));
 	    return ret;
-	}		
+	}
+	
+	private void installSchema(Schema schema)
+	{
+		if(schema==null)
+			return;
+		schema.Install();
+	}
 }
