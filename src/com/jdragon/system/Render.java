@@ -15,10 +15,15 @@ public class Render
 		}
 
 		String formName=form.name();
+		BaseElement elem=form.getElement();
+		if(elem!=null)
+		{
+			formName=elem.getClass().getCanonicalName()+"#"+formName;
+		}
 		
 		String formStr=builder
 		.tag("FORM").name(formName).attr("method", "POST")
-			.input().type("HIDDEN").name("FORMNAME").value(formName)
+			.input().type("HIDDEN").name(JDCONST.FORM_ID).value(formName)
 			.end()
 			.text(form.Render())
 		.end()
@@ -29,7 +34,7 @@ public class Render
 	
 	public static String link(String display, String url)
 	{
-		return "<a href=" + Q(url) + ">" + display + "</a>";
+		return "<a href=" + Q("/jdragon"+url) + ">" + display + "</a>";
 	}
 	
 	public static String Q(String str)

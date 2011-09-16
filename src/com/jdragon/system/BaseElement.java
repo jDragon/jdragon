@@ -79,6 +79,7 @@ public abstract class BaseElement
 	public Form getForm(String formName)
 	{
 		Form form=new Form(formName);
+		form.setElement(this);
 		try 
 		{
 			String methodName= formName;

@@ -3,43 +3,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-	<meta name="author" content="Dave Shea" />
-	<meta name="keywords" content="design, css, cascading, style, sheets, xhtml, graphic design, w3c, web standards, visual, display" />
+	<meta name="author" content="raghukr" />
+	<meta name="keywords" content="jdragon,java,framework,web application" />
 	<meta name="description" content="A demonstration of what can be accomplished visually through CSS-based design." />
 	<meta name="robots" content="all" />
 
-	<title>css Zen Garden: The Beauty in CSS Design</title>
+	<title>JDragon</title>
 	${css}
 
 </head>
 
-<body onload="window.defaultStatus='css Zen Garden: The Beauty in CSS Design';" id="css-zen-garden">
+<body id="css-zen-garden">
 
 <div id="container">
 	<div id="intro">
 		<div id="pageHeader">
-			<h1><span>css Zen Garden</span></h1>
-			<h2><span>The Beauty of <acronym title="Cascading Style Sheets">CSS</acronym> Design</span></h2>
+			<h1><span>JDragon</span></h1>
+			<h2><span>The Beauty of <acronym title="jD">JDragon</acronym> Design</span></h2>
 		</div>
 
 
 		<div id="preamble">
 		</div>
 	</div>
-<div class="messages">
-	<#if messages?exists>
+
+<#if messages?exists>
+	<div class="messages">
 		<#list messages as msg>
 		        ${msg} <br />
 		</#list>
-	</#if>
-</div>
-<div class="errors">
-	<#if errors?exists>
+	</div>
+</#if>
+
+<#if errors?exists>
+	<div class="errors">
 		<#list errors as err>
 		        ${err} <br />
 		</#list>
-	</#if>
-</div>
+	</div>
+</#if>
+	
 		<h3><span>${title}</span></h3>
 		${content}
 	<div id="linkList">

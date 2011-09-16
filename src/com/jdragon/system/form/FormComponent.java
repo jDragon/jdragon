@@ -54,6 +54,16 @@ public abstract class FormComponent
 		return false;
 	}
 	
+	public boolean readonly()
+	{
+		return true;
+	}
+	
+	public boolean enabled()
+	{
+		return true;
+	}
+	
 	public abstract String Render();
 	
 }

@@ -118,18 +118,26 @@ public class JDSettings extends BaseElement
 			reloadCache();
 			PageHandler.setMessage("Cache Reloaded");
 		}
+		
+		boolean isEdit=args.size()>3 && "edit".equals(args.get(3));
+		
 		XMLBuilder builder=new XMLBuilder();
-		builder.tag("table")//.attr("style", "border: 1px solid #000;")
-			.tag("tr").tag("th").text("Name").end().tag("th").text("Value").end().end();
+		builder.tag("table")
+			.tag("tr")
+				.tag("th").text("Name").end()
+				.tag("th").text("Value").end()
+				.tag("th").text("Actions").end()
+			.end();
 		
 		String sql=DBAccess.SQL("select * from [settings]");
 		Connection conn=DBAccess.getConnection();
 		Statement stmt=conn.createStatement();
 		ResultSet rs=stmt.executeQuery(sql);
-		String name="", value="";
+		String name="", value="", id="";
 		while (rs.next())
 		{
 			  builder.tag("tr");
+			  id=rs.getString("id");
 			  name = rs.getString("name");
 			  value = rs.getString("value");
 			  builder
@@ -138,8 +146,19 @@ public class JDSettings extends BaseElement
 			  	.end()
 			  	.tag("td")
 			  		.text(value)
-			  	.end();
+			  	.end()
+			  	.tag("td")
+		  		.text(Render.link("Edit", "/admin/settings/"+id+"/edit"))
+		  		.end();
 			  builder.end();//tr
+			  
+			  if(isEdit && id.equals(args.get(2)))
+			  {
+				  Map<String, String[]> formVals=new HashMap<String, String[]>();
+				  formVals.put("sname", new String[]{name});
+				  formVals.put("svalue", new String[]{value});
+				  Form.setFormValues(formVals);
+			  }
 		}
 		builder.end();//table
 		
@@ -150,6 +169,7 @@ public class JDSettings extends BaseElement
 	{
 		urlCallbackMap.put("/admin/settings", "settings");
 		urlCallbackMap.put("/admin/settings/reload", "settings");
+		urlCallbackMap.put("/admin/settings/%/edit", "settings");
 	}
 
 	public void JDSettingsForm(Form form)

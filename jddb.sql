@@ -59,7 +59,7 @@ CREATE TABLE `jd_routes` (
 
 /*!40000 ALTER TABLE `jd_routes` DISABLE KEYS */;
 LOCK TABLES `jd_routes` WRITE;
-INSERT INTO `jd_routes` VALUES (2,'/Install','com.jdragon.system.element.JDInstall','mainContent'),(27,'/Index/%/view','com.jdragon.element.CustomElementTest','mainContent'),(28,'/Indextest','com.jdragon.element.CustomElementTest','mainContent'),(29,'/admin/settings/reload','com.jdragon.system.element.JDSettings','settings'),(30,'/admin/settings','com.jdragon.system.element.JDSettings','settings'),(34,'/register','com.jdragon.system.element.JDAuth','register'),(35,'/login','com.jdragon.system.element.JDAuth','login'),(36,'/logout','com.jdragon.system.element.JDAuth','logout');
+INSERT INTO `jd_routes` VALUES (2,'/Install','com.jdragon.system.element.JDInstall','mainContent'),(27,'/Index/%/view','com.jdragon.element.CustomElementTest','mainContent'),(28,'/Indextest','com.jdragon.element.CustomElementTest','mainContent'),(34,'/register','com.jdragon.system.element.JDAuth','register'),(35,'/login','com.jdragon.system.element.JDAuth','login'),(36,'/logout','com.jdragon.system.element.JDAuth','logout'),(40,'/admin/settings/%/edit','com.jdragon.system.element.JDSettings','settings'),(41,'/admin/settings/reload','com.jdragon.system.element.JDSettings','settings'),(42,'/admin/settings','com.jdragon.system.element.JDSettings','settings');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_routes` ENABLE KEYS */;
 
@@ -69,8 +69,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `jd_settings`;
 CREATE TABLE `jd_settings` (
-  `name` varchar(48) default NULL,
-  `value` varchar(512) default NULL,
+  `name` varchar(48) NOT NULL,
+  `value` varchar(512) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -81,7 +83,7 @@ CREATE TABLE `jd_settings` (
 
 /*!40000 ALTER TABLE `jd_settings` DISABLE KEYS */;
 LOCK TABLES `jd_settings` WRITE;
-INSERT INTO `jd_settings` VALUES ('tempdir','C:/temp'),('CONTENT_DIR','E:/jdragon/WebContent'),('DefaultTemplate','default');
+INSERT INTO `jd_settings` VALUES ('tempdir','C:/temp',1),('CONTENT_DIR','E:/jdragon/WebContent',2),('DefaultTemplate','default',3);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `jd_settings` ENABLE KEYS */;
 

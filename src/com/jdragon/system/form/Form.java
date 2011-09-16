@@ -2,12 +2,15 @@ package com.jdragon.system.form;
 
 import java.util.*;
 
+import com.jdragon.system.BaseElement;
 import com.jdragon.system.PageHandler;
 
 public class Form
 {
 	private static ThreadLocal<Map<String, String>> formErrMap= new ThreadLocal<Map<String, String>>();
 	private static ThreadLocal<Map<String, String[]>> formValues= new ThreadLocal<Map<String, String[]>>();
+	
+	private BaseElement _elem=null;
 
 	private String _name="";
 	private List<FormComponent> _elements=new ArrayList<FormComponent>();
@@ -63,5 +66,15 @@ public class Form
 	{
 		formErrMap.set(new HashMap<String, String>());
 		formValues.set(new HashMap<String, String[]>());
+	}
+
+	public BaseElement getElement()
+	{
+		return _elem;
+	}
+
+	public void setElement(BaseElement elem)
+	{
+		_elem = elem;
 	}
 }

@@ -73,34 +73,34 @@ public class Index extends HttpServlet
 			 * default to error handler element & do not process POST params & form
 			 */
 			
+			String formName="", formElementName="";
+			boolean isPost=method.equals("POST");
 			if(elem==null)
 			{
 				elem=new JDErrorHandler();
 				callback="mainContent";
 			}
-			else if(method.equals("POST"))
+			else if(isPost)
 			{
-				String[] formNames=request.getParameterValues("FORMNAME");
-				if(formNames.length!=1 || formNames[0]==null || formNames[0].equals(""))
+				String[] formIDs=request.getParameterValues(JDCONST.FORM_ID);
+				if(formIDs.length!=1 || formIDs[0]==null || formIDs[0].equals(""))
 				{
 					//throw error here
 				}
-				String formName=formNames[0];
+				String formID=formIDs[0];
+				String formIDArr[]=formID.split("#");
 				
-				HashMap<String, String[]> params=new HashMap<String, String[]>();
-				Enumeration<?> paramNames = request.getParameterNames();
-				while(paramNames.hasMoreElements()) 
+				if(formIDArr.length<2)
 				{
-					String paramName = (String)paramNames.nextElement();
-					String[] paramValues = request.getParameterValues(paramName);
-					params.put(paramName, paramValues);
-					Form.setFormValues(params);
+					throw new JDException("Something wrong with Form");
 				}
 				
-				if(elem.validateForm(formName, params)==true)
-					elem.submitForm(formName, params);
+				formElementName=formIDArr[0];
+				formName=formIDArr[1];
 				
-				elem.setSubmit(true);
+				if(elem.getClass().getCanonicalName().equals(formElementName))
+					processPostData(request, elem, formName);
+				
 			}
 			
 			Map<String, Object> vars=new HashMap<String, Object>();
@@ -120,7 +120,7 @@ public class Index extends HttpServlet
 				response.sendRedirect(redirURL);
 				return;
 			}
-			
+// TODO Handle case of same elements for multiple chunks
 			List<ChunkEntry> seList=getChunks("");
 			for(int indx=0; indx<seList.size(); indx++)
 			{
@@ -128,9 +128,12 @@ public class Index extends HttpServlet
 				String sPosition=se.getPosition();
 				String sName=se.getName();
 				String selemName=se.getChunk();
-				BaseElement selem=BaseElement.getElementByName(selemName);
+				BaseElement chunkElem=BaseElement.getElementByName(selemName);
+
+				if(isPost && chunkElem.getClass().getCanonicalName().equals(formElementName))
+					processPostData(request, chunkElem, formName);
 				
-				Chunk s=selem.chunk(sName);
+				Chunk s=chunkElem.chunk(sName);
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("title", s.getTitle());
 				map.put("data", s.getContent());
@@ -158,6 +161,24 @@ public class Index extends HttpServlet
 		DBAccess.disconnect();
 	}
 
+	private void processPostData(HttpServletRequest request, BaseElement elem, String formName)
+	{
+		HashMap<String, String[]> params=new HashMap<String, String[]>();
+		Enumeration<?> paramNames = request.getParameterNames();
+		while(paramNames.hasMoreElements()) 
+		{
+			String paramName = (String)paramNames.nextElement();
+			String[] paramValues = request.getParameterValues(paramName);
+			params.put(paramName, paramValues);
+			Form.setFormValues(params);
+		}
+		
+		if(elem.validateForm(formName, params)==true)
+			elem.submitForm(formName, params);
+		
+		elem.setSubmit(true);
+	}
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */

@@ -39,7 +39,7 @@ public class JDUser
 	{
 		return _uid;
 	}
-	
+
 	public Map<Integer, String> getRoles()
 	{
 		return _roles;

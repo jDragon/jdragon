@@ -54,11 +54,11 @@ public class JDAuth extends BaseElement
 		
 		if(this.submitted() && _isValid)
 		{
-			return "Login Successful";
+			return JDMessage.getJDMessage("LoginSuccess");
 		}
 
 		if(isLoggedIn)
-			return "Already Logged in";
+			return JDMessage.getJDMessage("LoggedInAlready");
 		
 		Form loginForm=getForm("loginForm");
 
@@ -131,7 +131,6 @@ public class JDAuth extends BaseElement
 
 			conn.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;

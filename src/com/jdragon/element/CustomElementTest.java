@@ -72,10 +72,19 @@ public class CustomElementTest extends BaseElement
 	{
 		Chunk s=new Chunk();
 		s.setTitle("Sample 2");
-		s.setContent("Have a good day! <br />"
+		String str=
+		"Have a good day! <br />"
 				//+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
 				+ "Welcome "+JDSession.getUser().getUsername()
-				);
+				;
+		
+		if(this.submitted())
+			str=str+"<br />Form Submitted <br />";
+		else
+			str=str+"<br />"+Render.form(getForm("chunkFormTest"));
+		
+		s.setContent(str);
+		
 		return s;
 	}	
 	
@@ -83,6 +92,34 @@ public class CustomElementTest extends BaseElement
 	{
 		urlCallbackMap.put("/Index/%/view", "mainContent");
 		urlCallbackMap.put("/Indextest", "mainContent");
+	}
+
+	public void chunkFormTest(Form form)
+	{
+		form.addComponent(new TextBox("num1").title("Number 1").value(""));
+		form.addComponent(new TextBox("num2").title("Number 2").value(""));
+		
+		form.addComponent(new Select("select1")
+							.option("+", "Add")
+							.selectedoption("-", "Subtract")
+							.title("Select Operation")
+		);
+		
+		form.addComponent(new Submit("submitbtn").title("Go!"));
+	}
+	
+	public boolean chunkFormTest_submit(HashMap<String, String[]> params)
+	{
+		String val1 = params.get("num1")[0];
+		String val2 = params.get("num2")[0];
+		int ival1=Integer.parseInt(val1);
+		int ival2=Integer.parseInt(val2);
+		
+		if(params.get("select1")[0].equals("+"))
+			_sum=(new Integer(ival1+ival2)).toString();
+		else
+			_sum=(new Integer(ival1-ival2)).toString();
+		return true;
 	}
 
 	public void myForm(Form form)
