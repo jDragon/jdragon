@@ -9,6 +9,7 @@ public abstract class FormComponent
 	protected Map<String, String> _errorMap=null;
 	protected Map<String, String[]> _valueMap=null;
 	private Object _value=null;
+	private boolean _readonly=true, _enabled=true;
 	
 	public FormComponent(String name)
 	{
@@ -56,14 +57,26 @@ public abstract class FormComponent
 	
 	public boolean readonly()
 	{
-		return true;
+		return _readonly;
 	}
-	
+
+	public FormComponent readonly(boolean readonly)
+	{
+		_readonly = readonly;
+		return this;
+	}
+
 	public boolean enabled()
 	{
-		return true;
+		return _enabled;
 	}
-	
+
+	public FormComponent enabled(boolean enabled)
+	{
+		_enabled = enabled;
+		return this;
+	}
+
 	public abstract String Render();
 	
 }

@@ -5,6 +5,7 @@ package com.jdragon.element;
 
 import java.util.*;
 
+import com.jdragon.system.AccessHandler;
 import com.jdragon.system.BaseElement;
 import com.jdragon.system.JDRequest;
 import com.jdragon.system.JDSession;
@@ -65,6 +66,7 @@ public class CustomElementTest extends BaseElement
 		Chunk s=new Chunk();
 		s.setTitle("Sample 1");
 		s.setContent("Hello, World! <br />" + lnk);
+
 		return s;
 	}
 	
@@ -77,9 +79,15 @@ public class CustomElementTest extends BaseElement
 				//+ "Your role: " + (JDSession.getUserRole()!=null?JDSession.getUserRole():"Guest")
 				+ "Welcome "+JDSession.getUser().getUsername()
 				;
+
+		if(AccessHandler.access("testaccess"))
+			str=str+"<br /><b>has access! Yippee!</b>";
+		else
+			str=str+"<br /><b>has NO access</b>";
+		
 		
 		if(this.submitted())
-			str=str+"<br />Form Submitted <br />";
+			str=str+"<br />Answer is: "+_sum+" <br />";
 		else
 			str=str+"<br />"+Render.form(getForm("chunkFormTest"));
 		

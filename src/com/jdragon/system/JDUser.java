@@ -59,9 +59,22 @@ public class JDUser
 
 			if(rs.next())
 			{
+				user._uid=rs.getInt("id");
 				user._user=rs.getString("username");
 				user._firstname=rs.getString("firstname");
 				user._lastname=rs.getString("lastname");
+			}
+			
+			stmt = conn.createStatement();
+			
+			sql= DBAccess.SQL("select * from [user_role] where uid=%d", user._uid) ;
+			System.out.println(sql);
+			rs=stmt.executeQuery(sql);
+			while(rs.next())
+			{
+				System.out.println("RID: "+rs.getInt("rid"));
+// TODO get role name here				
+				user._roles.put(rs.getInt("rid"), "role");
 			}
 		} 
 		catch (Exception e) 
