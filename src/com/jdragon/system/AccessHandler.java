@@ -77,5 +77,4 @@ public class AccessHandler
 	}
 
 	private static Map<String, List<Integer>> _accessHash = null;
-	
 }

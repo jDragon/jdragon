@@ -46,7 +46,7 @@ public class JDAuth extends BaseElement
 			e.printStackTrace();
 		}
 		return _isValid;
-	}	
+	}
 	
 	public String login() throws Exception
 	{
